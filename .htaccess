@@ -1,6 +1,6 @@
 Options -Indexes
-DirectoryIndex index.html index.php
-ErrorDocument 404 /404.html
+DirectoryIndex index.php
+ErrorDocument 404 /index.php
 
 <FilesMatch "^(README\.md|\.gitignore)$">
   Require all denied
@@ -11,28 +11,24 @@ ErrorDocument 404 /404.html
 
   # Force HTTPS
   RewriteCond %{HTTPS} off
+  RewriteCond %{HTTP:X-Forwarded-Proto} !https
   RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
 
   # Force non-www
   RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
   RewriteRule ^ https://%1%{REQUEST_URI} [L,R=301]
 
-  # Old .html URLs -> clean folders (e.g. /faq.html -> /faq/)
-  RewriteCond %{THE_REQUEST} \s/([a-z0-9-]+)\.html[\s?] [NC]
-  RewriteCond %1 !^404$
-  RewriteRule ^ /%1/ [L,R=301]
-
-  # Add trailing slash to folder pages (e.g. /faq -> /faq/)
+  # Everything that isn't a real file or the admin goes to the CMS
+  RewriteCond %{REQUEST_URI} !^/admin(/|$)
   RewriteCond %{REQUEST_FILENAME} !-f
-  RewriteCond %{DOCUMENT_ROOT}/$1 -d
-  RewriteRule ^(.+[^/])$ /$1/ [L,R=301]
+  RewriteRule ^ index.php [L,QSA]
 </IfModule>
 
 <IfModule mod_headers.c>
   Header always set X-Content-Type-Options "nosniff"
   Header always set Referrer-Policy "strict-origin-when-cross-origin"
   Header always set X-Frame-Options "SAMEORIGIN"
-  <FilesMatch "\.(css|js|svg|png|jpg|webp|woff2)$">
+  <FilesMatch "\.(css|js|svg|png|jpg|jpeg|webp|gif|ico|woff2)$">
     Header set Cache-Control "public, max-age=604800"
   </FilesMatch>
 </IfModule>

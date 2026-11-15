@@ -1,0 +1,87 @@
+<section class="page-hero" style="padding-bottom:96px">
+  <div class="container split">
+    <div class="sticky">
+      <div class="crumbs"><a href="/">Home</a> / Get a quote</div>
+      <span class="eyebrow">Get a quote</span>
+      <h1>Tell us how you take payments.</h1>
+      <p class="lede">One short form is all it takes. We&rsquo;ll come back by email with a tailored quote &mdash; whether you&rsquo;re setting up for the first time or reviewing what you already run.</p>
+      <h3 class="mt-l">What happens next</h3>
+      <ol class="numbered">
+        <li><div><h4>We read your enquiry</h4><p>A real person reads what you send and works out what you actually need &mdash; not which product to push.</p></div></li>
+        <li><div><h4>We come back by email</h4><p>With questions or a tailored quote. No phone tag, and no call unless you&rsquo;d like one.</p></div></li>
+        <li><div><h4>You decide, in your time</h4><p>You get a clear recommendation with the reasoning shown. No obligation and no pressure to sign.</p></div></li>
+      </ol>
+      <div class="callout mt-m"><p><strong>Prefer email?</strong> Write to <a href="mailto:{{email}}">{{email}}</a> &mdash; tell us what you sell, how customers pay and roughly what you take by card each month.</p></div>
+    </div>
+    <div>
+      <p class="muted" style="font-size:.92rem">Request a quote. Required fields are marked <span class="req">*</span>.</p>
+      <form class="form-card" action="/send.php" method="post">
+  <div class="form-alert error" data-form-alert hidden role="alert"></div>
+  <input type="hidden" name="source" value="contact">
+  <div class="hp" aria-hidden="true">
+    <label for="website-contact">Leave this field empty</label>
+    <input type="text" id="website-contact" name="website" tabindex="-1" autocomplete="off">
+  </div>
+  <div class="form-row two">
+    <div>
+      <label for="name-contact">Your name <span class="req">*</span></label>
+      <input type="text" id="name-contact" name="name" required autocomplete="name" maxlength="120">
+    </div>
+    <div>
+      <label for="email-contact">Email <span class="req">*</span></label>
+      <input type="email" id="email-contact" name="email" required autocomplete="email" maxlength="160">
+    </div>
+  </div>
+  <div class="form-row two">
+    <div>
+      <label for="business-contact">Business name <span class="opt">(optional)</span></label>
+      <input type="text" id="business-contact" name="business" autocomplete="organization" maxlength="160">
+    </div>
+    <div>
+      <label for="phone-contact">Phone <span class="opt">(optional)</span></label>
+      <input type="tel" id="phone-contact" name="phone" autocomplete="tel" maxlength="40">
+    </div>
+  </div>
+  <div class="form-row two">
+    <div>
+      <label for="industry-contact">Type of business <span class="opt">(optional)</span></label>
+      <select id="industry-contact" name="industry">
+        <option value="">Choose one</option>
+        <option>Retail / shop</option>
+        <option>Caf&eacute;, restaurant or bar</option>
+        <option>Trades / field services</option>
+        <option>Ecommerce</option>
+        <option>Professional services</option>
+        <option>Health, beauty or wellness</option>
+        <option>Events or markets</option>
+        <option>Gym, club or memberships</option>
+        <option>Travel or transport</option>
+        <option>Other</option>
+      </select>
+    </div>
+    <div>
+      <label for="turnover-contact">Monthly turnover <span class="opt">(optional)</span></label>
+      <select id="turnover-contact" name="turnover">
+        <option value="">Choose a range</option>
+        <option>Just starting / not sure</option>
+        <option>Under &pound;5,000</option>
+        <option>&pound;5,000 &ndash; &pound;20,000</option>
+        <option>&pound;20,000 &ndash; &pound;100,000</option>
+        <option>Over &pound;100,000</option>
+      </select>
+    </div>
+  </div>
+  <fieldset class="form-row">
+    <legend class="label">How do you take payments today?</legend>
+    <div class="choice-grid"><label class="choice"><input type="checkbox" name="channels[]" value="in-person"><span>In person</span></label><label class="choice"><input type="checkbox" name="channels[]" value="online"><span>Online</span></label><label class="choice"><input type="checkbox" name="channels[]" value="phone"><span>Over the phone</span></label><label class="choice"><input type="checkbox" name="channels[]" value="not-yet"><span>Not yet</span></label></div>
+  </fieldset>
+  <div class="form-row">
+    <label for="message-contact">What would you like a quote for?</label>
+    <textarea id="message-contact" name="message" maxlength="4000" placeholder="e.g. two portable card machines for a restaurant, plus payment links for deposits"></textarea>
+  </div>
+  <button class="btn btn-primary" type="submit">Request a quote <span class="arrow" aria-hidden="true">&rarr;</span></button>
+  <p class="form-note">We&rsquo;ll come back to you by email. No phone tag, no pressure. Please don&rsquo;t include card numbers. See our <a href="/privacy/">privacy notice</a>.</p>
+</form>
+    </div>
+  </div>
+</section>

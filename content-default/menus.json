@@ -1,0 +1,382 @@
+{
+ "header": [
+  {
+   "type": "mega",
+   "label": "Solutions",
+   "columns": [
+    {
+     "title": "Accept payments",
+     "items": [
+      {
+       "label": "POS & card machines",
+       "url": "/card-machines/",
+       "icon": "terminal",
+       "desc": "Countertop, portable, 4G and unattended"
+      },
+      {
+       "label": "Online payment gateway",
+       "url": "/online-payments/",
+       "icon": "globe",
+       "desc": "Checkout, links and recurring billing"
+      },
+      {
+       "label": "Phone payments (MOTO)",
+       "url": "/online-payments/#virtual-terminal",
+       "icon": "phone",
+       "desc": "Virtual terminal and pay-by-link"
+      },
+      {
+       "label": "Payment methods",
+       "url": "/solutions/payment-methods/",
+       "icon": "card",
+       "desc": "Cards, wallets, PayPal, pay later and more"
+      },
+      {
+       "label": "Multi-currency & DCC",
+       "url": "/solutions/multi-currency/",
+       "icon": "coins",
+       "desc": "Price and accept in customers’ currencies"
+      }
+     ]
+    },
+    {
+     "title": "Move money",
+     "items": [
+      {
+       "label": "Settlements",
+       "url": "/solutions/settlements/",
+       "icon": "bank",
+       "desc": "Multi-currency payouts to your accounts"
+      },
+      {
+       "label": "Stablecoin settlements",
+       "url": "/solutions/settlements/#stablecoin",
+       "icon": "sparkle",
+       "desc": "Faster cross-border settlement via partners"
+      },
+      {
+       "label": "Card payouts",
+       "url": "/solutions/card-payouts/",
+       "icon": "receipt",
+       "desc": "Send funds straight to customers’ cards"
+      },
+      {
+       "label": "Switch & save",
+       "url": "/switch/",
+       "icon": "search",
+       "desc": "Free line-by-line statement review"
+      }
+     ]
+    },
+    {
+     "title": "Optimise & protect",
+     "items": [
+      {
+       "label": "Payment orchestration",
+       "url": "/solutions/orchestration/",
+       "icon": "refresh",
+       "desc": "Smart routing across multiple providers"
+      },
+      {
+       "label": "Risk, fraud & security",
+       "url": "/solutions/risk-fraud/",
+       "icon": "shield",
+       "desc": "Screening, 3DS2, PCI and P2PE"
+      },
+      {
+       "label": "Network tokens",
+       "url": "/solutions/risk-fraud/#network-tokens",
+       "icon": "lock",
+       "desc": "Scheme tokens instead of raw card numbers"
+      },
+      {
+       "label": "Integration",
+       "url": "/solutions/integration/",
+       "icon": "plug",
+       "desc": "Plugins, hosted pages and APIs"
+      }
+     ]
+    },
+    {
+     "title": "Beyond payments",
+     "items": [
+      {
+       "label": "ePOS systems",
+       "url": "/solutions/epos/",
+       "icon": "store",
+       "desc": "Tills for retail and hospitality, linked to payments"
+      },
+      {
+       "label": "Loyalty & smart receipts",
+       "url": "/solutions/loyalty/",
+       "icon": "heart",
+       "desc": "Bring customers back"
+      },
+      {
+       "label": "Business funding",
+       "url": "/solutions/business-funding/",
+       "icon": "chart",
+       "desc": "Cash advance repaid from card sales"
+      },
+      {
+       "label": "Apple Pay & Click to Pay",
+       "url": "/solutions/digital-wallets/",
+       "icon": "wallet",
+       "desc": "One-tap checkout"
+      },
+      {
+       "label": "All solutions",
+       "url": "/solutions/",
+       "icon": "sparkle",
+       "desc": "See everything we can arrange"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "type": "mega",
+   "label": "Industries",
+   "columns": [
+    {
+     "title": "Everyday commerce",
+     "items": [
+      {
+       "label": "Retail",
+       "url": "/industries/#retail",
+       "icon": "store",
+       "desc": "Shops and multi-site retail"
+      },
+      {
+       "label": "Restaurants & bars",
+       "url": "/industries/#hospitality",
+       "icon": "cup",
+       "desc": "Pay-at-table, tips and EPOS"
+      },
+      {
+       "label": "Hotels & hospitality",
+       "url": "/industries/#hotels",
+       "icon": "users",
+       "desc": "Pre-auths, deposits and bookings"
+      },
+      {
+       "label": "Ecommerce",
+       "url": "/industries/#ecommerce",
+       "icon": "cart",
+       "desc": "Checkout that converts"
+      },
+      {
+       "label": "Trades & builders merchants",
+       "url": "/industries/#trades",
+       "icon": "tool",
+       "desc": "On site and over the counter"
+      },
+      {
+       "label": "Automotive",
+       "url": "/industries/#automotive",
+       "icon": "car",
+       "desc": "Garages, servicing and dealers"
+      }
+     ]
+    },
+    {
+     "title": "Specialist sectors",
+     "items": [
+      {
+       "label": "iGaming",
+       "url": "/industries/igaming/",
+       "icon": "ticket",
+       "desc": "Casino, sportsbook and gaming operators"
+      },
+      {
+       "label": "Forex & CFD",
+       "url": "/industries/forex/",
+       "icon": "chart",
+       "desc": "Deposits and withdrawals for brokers"
+      },
+      {
+       "label": "Financial brokerage",
+       "url": "/industries/financial-brokerage/",
+       "icon": "briefcase",
+       "desc": "Investment and trading platforms"
+      },
+      {
+       "label": "Online competitions",
+       "url": "/industries/#competitions",
+       "icon": "sparkle",
+       "desc": "Prize draws and competition sites"
+      },
+      {
+       "label": "Law firms & professional",
+       "url": "/industries/#professional",
+       "icon": "file",
+       "desc": "Client account and invoice payments"
+      },
+      {
+       "label": "All industries",
+       "url": "/industries/",
+       "icon": "globe",
+       "desc": "Every sector we work with"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "type": "link",
+   "label": "Crypto",
+   "url": "/crypto/"
+  },
+  {
+   "type": "link",
+   "label": "Switch & save",
+   "url": "/switch/"
+  },
+  {
+   "type": "mega",
+   "label": "Company",
+   "columns": [
+    {
+     "title": "Company",
+     "items": [
+      {
+       "label": "How it works",
+       "url": "/how-it-works/",
+       "icon": "clipboard",
+       "desc": "Four steps, honest timelines"
+      },
+      {
+       "label": "FAQ",
+       "url": "/faq/",
+       "icon": "file",
+       "desc": "Merchant services, explained"
+      },
+      {
+       "label": "Partner with us",
+       "url": "/partners/",
+       "icon": "users",
+       "desc": "Referral and reseller partnerships"
+      },
+      {
+       "label": "Get a quote",
+       "url": "/contact/",
+       "icon": "mail",
+       "desc": "One short form, reply by email"
+      }
+     ]
+    }
+   ]
+  }
+ ],
+ "cta": {
+  "label": "Get a quote",
+  "url": "/contact/"
+ },
+ "footer": [
+  {
+   "title": "Solutions",
+   "items": [
+    {
+     "label": "Online payment gateway",
+     "url": "/online-payments/"
+    },
+    {
+     "label": "POS & card machines",
+     "url": "/card-machines/"
+    },
+    {
+     "label": "Multi-currency",
+     "url": "/solutions/multi-currency/"
+    },
+    {
+     "label": "Settlements",
+     "url": "/solutions/settlements/"
+    },
+    {
+     "label": "Payment orchestration",
+     "url": "/solutions/orchestration/"
+    },
+    {
+     "label": "Risk & fraud",
+     "url": "/solutions/risk-fraud/"
+    },
+    {
+     "label": "Crypto payments",
+     "url": "/crypto/"
+    }
+   ]
+  },
+  {
+   "title": "Who we help",
+   "items": [
+    {
+     "label": "Retail",
+     "url": "/industries/#retail"
+    },
+    {
+     "label": "Restaurants & bars",
+     "url": "/industries/#hospitality"
+    },
+    {
+     "label": "Ecommerce",
+     "url": "/industries/#ecommerce"
+    },
+    {
+     "label": "iGaming",
+     "url": "/industries/igaming/"
+    },
+    {
+     "label": "Forex & CFD",
+     "url": "/industries/forex/"
+    },
+    {
+     "label": "Financial brokerage",
+     "url": "/industries/financial-brokerage/"
+    },
+    {
+     "label": "All industries",
+     "url": "/industries/"
+    }
+   ]
+  },
+  {
+   "title": "Company",
+   "items": [
+    {
+     "label": "How it works",
+     "url": "/how-it-works/"
+    },
+    {
+     "label": "FAQ",
+     "url": "/faq/"
+    },
+    {
+     "label": "Partner with us",
+     "url": "/partners/"
+    },
+    {
+     "label": "Switch & save",
+     "url": "/switch/"
+    },
+    {
+     "label": "Get a quote",
+     "url": "/contact/"
+    }
+   ]
+  }
+ ],
+ "legal": [
+  {
+   "label": "Privacy",
+   "url": "/privacy/"
+  },
+  {
+   "label": "Terms",
+   "url": "/terms/"
+  },
+  {
+   "label": "Cookies",
+   "url": "/cookies/"
+  }
+ ]
+}

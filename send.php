@@ -4,8 +4,11 @@
  * Emails the enquiry to TO_EMAIL and redirects to /thank-you/.
  */
 
-const TO_EMAIL   = 'info@dpayments.co.uk';
-const FROM_EMAIL = 'noreply@dpayments.co.uk'; // must be a mailbox/domain on your hosting for best deliverability
+require __DIR__ . '/core/site.php';
+ensure_content();
+// Recipient and sender come from Settings in /admin/
+define('TO_EMAIL', (settings()['contact']['email'] ?? '') ?: 'info@dpayments.co.uk');
+define('FROM_EMAIL', preg_replace('~[^A-Za-z0-9@._+-]~', '', (settings()['form_from'] ?? '') ?: 'noreply@dpayments.co.uk'));
 
 if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     header('Location: /contact/');
@@ -80,7 +83,7 @@ $lines = [
 $body = implode("\n", $lines);
 
 $headers = [
-    'From: DPayments Website <' . FROM_EMAIL . '>',
+    'From: ' . str_replace(["\r", "\n"], '', settings()['site_name'] ?? 'Website') . ' Website <' . FROM_EMAIL . '>',
     'Reply-To: ' . $name . ' <' . $email . '>',
     'MIME-Version: 1.0',
     'Content-Type: text/plain; charset=UTF-8',
@@ -88,7 +91,7 @@ $headers = [
 ];
 
 // Store a copy for the website portal (admin/data is blocked from public access)
-$dataDir = __DIR__ . '/admin/data';
+$dataDir = CONTENT_DIR . '/data';
 if (is_dir($dataDir) && is_writable($dataDir)) {
     $record = [
         'date' => gmdate('Y-m-d H:i'), 'source' => $source, 'name' => $name, 'email' => $email,

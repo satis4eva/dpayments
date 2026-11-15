@@ -1,260 +1,147 @@
 <?php
 declare(strict_types=1);
+require dirname(__DIR__) . '/core/site.php';
+require dirname(__DIR__) . '/core/setup.php';
+ensure_content();
+header('X-Robots-Tag: noindex, nofollow');
+header('X-Frame-Options: SAMEORIGIN');
 
-define('ADMIN_DIR', __DIR__);
-define('SITE_ROOT', dirname(__DIR__));
-define('DATA_DIR', __DIR__ . '/data');
-define('CONFIGURED', is_file(__DIR__ . '/config.php'));
+// ---------------------------------------------------------------- auth
+function admin_account(): array { return read_json('data/admin.json'); }
+function has_admin(): bool { $a = admin_account(); return !empty($a['user']) && !empty($a['hash']); }
 
-if (CONFIGURED) {
-    require __DIR__ . '/config.php';
-}
-
-// ---------- Session ----------
 function start_session(): void {
     if (session_status() === PHP_SESSION_ACTIVE) return;
-    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off');
+    $secure = (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') || (($_SERVER['HTTP_X_FORWARDED_PROTO'] ?? '') === 'https');
     session_name('dp_admin');
-    session_set_cookie_params([
-        'lifetime' => 0, 'path' => '/admin/', 'secure' => $secure,
-        'httponly' => true, 'samesite' => 'Strict',
-    ]);
+    session_set_cookie_params(['lifetime' => 0, 'path' => '/', 'secure' => $secure, 'httponly' => true, 'samesite' => 'Lax']);
     session_start();
-    if (!empty($_SESSION['last']) && time() - $_SESSION['last'] > 7200) {
-        $_SESSION = [];
-        session_regenerate_id(true);
-    }
+    if (!empty($_SESSION['last']) && time() - $_SESSION['last'] > 4 * 3600) { $_SESSION = []; session_regenerate_id(true); }
     $_SESSION['last'] = time();
 }
-
-function is_logged_in(): bool {
-    start_session();
-    return !empty($_SESSION['user']);
-}
+function is_logged_in(): bool { start_session(); return !empty($_SESSION['user']) && has_admin(); }
 
 function require_login(bool $json = false): void {
-    if (!CONFIGURED || !is_logged_in()) {
-        if ($json) { json_out(['ok' => false, 'error' => 'Not logged in'], 401); }
-        header('Location: /admin/');
-        exit;
+    if (!is_logged_in()) {
+        if ($json) json_out(['ok' => false, 'error' => 'Your session has expired. Please log in again.'], 401);
+        header('Location: /admin/'); exit;
     }
 }
-
-function csrf_token(): string {
+function csrf_token(): string { start_session(); if (empty($_SESSION['csrf'])) $_SESSION['csrf'] = bin2hex(random_bytes(32)); return $_SESSION['csrf']; }
+function check_csrf(): bool {
     start_session();
-    if (empty($_SESSION['csrf'])) $_SESSION['csrf'] = bin2hex(random_bytes(32));
-    return $_SESSION['csrf'];
-}
-
-function check_csrf(?string $t): bool {
-    start_session();
+    $t = $_POST['csrf'] ?? ($_SERVER['HTTP_X_CSRF'] ?? null);
     return is_string($t) && !empty($_SESSION['csrf']) && hash_equals($_SESSION['csrf'], $t);
 }
-
-function h(?string $s): string {
-    return htmlspecialchars((string)$s, ENT_QUOTES | ENT_SUBSTITUTE, 'UTF-8');
+function require_post(): void {
+    if ($_SERVER['REQUEST_METHOD'] !== 'POST' || !check_csrf()) { http_response_code(400); exit('Session expired — please go back, reload and try again.'); }
 }
+function csrf_field(): string { return '<input type="hidden" name="csrf" value="' . e(csrf_token()) . '">'; }
 
-function json_out(array $data, int $code = 200): void {
+function json_out(array $d, int $code = 200): void {
     http_response_code($code);
     header('Content-Type: application/json; charset=utf-8');
     header('Cache-Control: no-store');
-    echo json_encode($data);
-    exit;
+    echo json_encode($d); exit;
 }
 
-// ---------- Login throttling ----------
-function throttle_file(): string { return DATA_DIR . '/login-attempts.json'; }
-
+// login throttling
 function too_many_attempts(): bool {
-    $ip = $_SERVER['REMOTE_ADDR'] ?? 'x';
-    $d = is_file(throttle_file()) ? (json_decode((string)file_get_contents(throttle_file()), true) ?: []) : [];
-    $r = $d[$ip] ?? null;
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'x'; $d = read_json('data/login-attempts.json'); $r = $d[$ip] ?? null;
     return $r && $r['n'] >= 5 && time() - $r['t'] < 900;
 }
-
 function record_attempt(bool $ok): void {
-    $ip = $_SERVER['REMOTE_ADDR'] ?? 'x';
-    $f = throttle_file();
-    $d = is_file($f) ? (json_decode((string)file_get_contents($f), true) ?: []) : [];
-    if ($ok) { unset($d[$ip]); }
-    else {
-        $r = $d[$ip] ?? ['n' => 0, 't' => time()];
-        if (time() - $r['t'] > 900) $r = ['n' => 0, 't' => time()];
-        $r['n']++; $r['t'] = time();
-        $d[$ip] = $r;
-    }
-    @file_put_contents($f, json_encode($d), LOCK_EX);
+    $ip = $_SERVER['REMOTE_ADDR'] ?? 'x'; $d = read_json('data/login-attempts.json');
+    if ($ok) unset($d[$ip]);
+    else { $r = $d[$ip] ?? ['n' => 0, 't' => time()]; if (time() - $r['t'] > 900) $r = ['n' => 0, 't' => time()]; $r['n']++; $r['t'] = time(); $d[$ip] = $r; }
+    @file_put_contents(content_path('data/login-attempts.json'), json_encode($d), LOCK_EX);
 }
 
-// ---------- Pages ----------
-/** List editable pages: relative path => title */
-function list_pages(): array {
-    $files = array_merge(
-        glob(SITE_ROOT . '/index.html') ?: [],
-        glob(SITE_ROOT . '/*/index.html') ?: [],
-        glob(SITE_ROOT . '/*/*/index.html') ?: []
-    );
-    $pages = [];
-    foreach ($files as $f) {
-        $rel = ltrim(substr($f, strlen(SITE_ROOT)), '/');
-        if (str_starts_with($rel, 'admin/')) continue;
-        $html = (string)file_get_contents($f, false, null, 0, 4000);
-        $title = preg_match('~<title>(.*?)</title>~s', $html, $m) ? html_entity_decode($m[1], ENT_QUOTES, 'UTF-8') : $rel;
-        $pages[$rel] = $title;
-    }
-    uksort($pages, function ($a, $b) {
-        if ($a === 'index.html') return -1;
-        if ($b === 'index.html') return 1;
-        return strcmp($a, $b);
-    });
-    return $pages;
+function flash(?string $msg = null, string $type = 'ok'): ?array {
+    start_session();
+    if ($msg !== null) { $_SESSION['flash'] = [$msg, $type]; return null; }
+    $f = $_SESSION['flash'] ?? null; unset($_SESSION['flash']); return $f;
+}
+function redirect(string $to): void { header('Location: ' . $to); exit; }
+
+// ---------------------------------------------------------------- uploads
+const UPLOAD_TYPES = ['image/jpeg' => 'jpg', 'image/png' => 'png', 'image/webp' => 'webp', 'image/gif' => 'gif', 'image/x-icon' => 'ico', 'image/vnd.microsoft.icon' => 'ico'];
+
+function handle_upload(array $f): string {
+    if (($f['error'] ?? UPLOAD_ERR_NO_FILE) !== UPLOAD_ERR_OK) throw new RuntimeException('Upload failed (code ' . ($f['error'] ?? '?') . ').');
+    if ($f['size'] > 6 * 1024 * 1024) throw new RuntimeException('Images must be under 6 MB.');
+    $mime = (new finfo(FILEINFO_MIME_TYPE))->file($f['tmp_name']) ?: '';
+    if (!isset(UPLOAD_TYPES[$mime])) throw new RuntimeException('Please upload a JPG, PNG, WebP, GIF or ICO image.');
+    if ($mime !== 'image/x-icon' && $mime !== 'image/vnd.microsoft.icon' && !@getimagesize($f['tmp_name'])) throw new RuntimeException('That file is not a valid image.');
+    $base = slugify(pathinfo((string)$f['name'], PATHINFO_FILENAME));
+    $name = $base . '-' . date('ymdHis') . '.' . UPLOAD_TYPES[$mime];
+    if (!is_dir(UPLOAD_DIR)) mkdir(UPLOAD_DIR, 0755, true);
+    if (!move_uploaded_file($f['tmp_name'], UPLOAD_DIR . '/' . $name)) throw new RuntimeException('Could not save the image.');
+    @chmod(UPLOAD_DIR . '/' . $name, 0644);
+    return '/uploads/' . $name;
 }
 
-function valid_page(string $rel): bool {
-    if (!preg_match('~^([a-z0-9-]+/){0,2}index\.html$~', $rel)) return false;
-    if (str_starts_with($rel, 'admin/')) return false;
-    return is_file(SITE_ROOT . '/' . $rel);
+function media_list(): array {
+    $files = glob(UPLOAD_DIR . '/*.{jpg,jpeg,png,webp,gif,ico}', GLOB_BRACE) ?: [];
+    usort($files, fn($a, $b) => filemtime($b) <=> filemtime($a));
+    return array_map(fn($f) => ['url' => '/uploads/' . basename($f), 'name' => basename($f), 'size' => filesize($f)], $files);
 }
 
-function page_url(string $rel): string {
-    return '/' . substr($rel, 0, -strlen('index.html'));
-}
-
-// ---------- Storage ----------
-function storage_mode(): string {
-    return defined('STORAGE_MODE') && STORAGE_MODE === 'local' ? 'local' : 'github';
-}
-
-function gh_request(string $method, string $path, ?array $body = null): array {
-    $url = 'https://api.github.com/repos/' . GITHUB_REPO . '/contents/' . GITHUB_PREFIX . $path;
-    if ($method === 'GET') $url .= '?ref=' . rawurlencode(GITHUB_BRANCH);
-    $ch = curl_init($url);
-    $headers = [
-        'Authorization: Bearer ' . GITHUB_TOKEN,
-        'Accept: application/vnd.github+json',
-        'X-GitHub-Api-Version: 2022-11-28',
-        'User-Agent: dpayments-portal',
-    ];
-    curl_setopt_array($ch, [
-        CURLOPT_RETURNTRANSFER => true,
-        CURLOPT_CUSTOMREQUEST => $method,
-        CURLOPT_TIMEOUT => 25,
-    ]);
-    if ($body !== null) {
-        $headers[] = 'Content-Type: application/json';
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($body));
-    }
-    curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
-    $res = curl_exec($ch);
-    $code = (int)curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $err = curl_error($ch);
-    curl_close($ch);
-    if ($res === false) throw new RuntimeException('Could not reach GitHub: ' . $err);
-    $data = json_decode((string)$res, true) ?: [];
-    if ($code >= 400) {
-        $msg = $data['message'] ?? ('HTTP ' . $code);
-        if ($code === 409) throw new RuntimeException('conflict');
-        throw new RuntimeException('GitHub error: ' . $msg);
-    }
-    return $data;
-}
-
-/** @return array{0:string,1:string} [html, version] */
-function read_page(string $rel): array {
-    if (storage_mode() === 'github') {
-        if (!GITHUB_TOKEN) throw new RuntimeException('GitHub token is not set in admin/config.php');
-        $d = gh_request('GET', $rel);
-        return [base64_decode(str_replace("\n", '', $d['content'] ?? '')), (string)($d['sha'] ?? '')];
-    }
-    $html = (string)file_get_contents(SITE_ROOT . '/' . $rel);
-    return [$html, sha1($html)];
-}
-
-function write_page(string $rel, string $html, string $version, string $message): string {
-    if (storage_mode() === 'github') {
-        $d = gh_request('PUT', $rel, [
-            'message' => $message,
-            'content' => base64_encode($html),
-            'sha' => $version,
-            'branch' => GITHUB_BRANCH,
-        ]);
-        return (string)($d['content']['sha'] ?? '');
-    }
-    $path = SITE_ROOT . '/' . $rel;
-    $current = (string)file_get_contents($path);
-    if (sha1($current) !== $version) throw new RuntimeException('conflict');
-    $bdir = DATA_DIR . '/backups';
-    if (!is_dir($bdir)) mkdir($bdir, 0750, true);
-    file_put_contents($bdir . '/' . str_replace('/', '__', $rel) . '.' . date('Ymd-His') . '.html', $current);
-    if (file_put_contents($path, $html, LOCK_EX) === false) throw new RuntimeException('Could not write file');
-    return sha1($html);
-}
-
-function list_backups(string $rel): array {
-    $files = glob(DATA_DIR . '/backups/' . str_replace('/', '__', $rel) . '.*.html') ?: [];
-    rsort($files);
-    return array_map('basename', array_slice($files, 0, 20));
-}
-
-// ---------- Editing helpers ----------
-function apply_edits(string $html, string $main, string $title, string $desc): string {
-    if (!preg_match('~<main id="main">.*</main>~s', $html)) throw new RuntimeException('Page structure not recognised');
-    if (stripos($main, '</main') !== false || stripos($main, '<script') !== false) {
-        throw new RuntimeException('Content contains tags that are not allowed (main/script)');
-    }
-    $html = preg_replace_callback('~(<main id="main">).*(</main>)~s', fn($m) => $m[1] . "\n" . $main . "\n" . $m[2], $html, 1);
-    if ($title !== '') {
-        $t = h($title);
-        $html = preg_replace('~<title>.*?</title>~s', '<title>' . $t . '</title>', $html, 1);
-        $html = preg_replace('~<meta property="og:title" content="[^"]*">~', '<meta property="og:title" content="' . $t . '">', $html, 1);
-    }
-    if ($desc !== '') {
-        $d = h($desc);
-        $html = preg_replace('~<meta name="description" content="[^"]*">~', '<meta name="description" content="' . $d . '">', $html, 1);
-        $html = preg_replace('~<meta property="og:description" content="[^"]*">~', '<meta property="og:description" content="' . $d . '">', $html, 1);
-    }
-    return $html;
-}
-
-function meta_of(string $html): array {
-    $title = preg_match('~<title>(.*?)</title>~s', $html, $m) ? html_entity_decode($m[1], ENT_QUOTES, 'UTF-8') : '';
-    $desc = preg_match('~<meta name="description" content="([^"]*)">~', $html, $m) ? html_entity_decode($m[1], ENT_QUOTES, 'UTF-8') : '';
-    return [$title, $desc];
-}
-
-// ---------- Enquiries ----------
+// ---------------------------------------------------------------- enquiries
 function read_enquiries(): array {
-    $f = DATA_DIR . '/enquiries.jsonl';
+    $f = content_path('data/enquiries.jsonl');
     if (!is_file($f)) return [];
     $rows = [];
-    foreach (file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $line) {
-        $r = json_decode($line, true);
-        if (is_array($r)) $rows[] = $r;
-    }
+    foreach (file($f, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES) ?: [] as $l) { $r = json_decode($l, true); if (is_array($r)) $rows[] = $r; }
     return array_reverse($rows);
 }
 
-// ---------- Layout ----------
-function admin_header(string $title, string $active = ''): void {
-    $nav = [
-        'pages' => ['/admin/', 'Pages'],
-        'enquiries' => ['/admin/enquiries.php', 'Enquiries'],
-    ];
-    echo '<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">';
-    echo '<meta name="robots" content="noindex, nofollow"><title>' . h($title) . ' · DPayments portal</title>';
-    echo '<link rel="icon" href="/assets/img/favicon.svg"><link rel="stylesheet" href="/admin/assets/admin.css"></head><body>';
-    if (is_logged_in()) {
-        echo '<header class="top"><a class="brand" href="/admin/"><img src="/assets/img/favicon.svg" alt=""> DPayments <span>portal</span></a><nav>';
-        foreach ($nav as $k => [$href, $label]) {
-            echo '<a href="' . $href . '"' . ($k === $active ? ' class="on"' : '') . '>' . $label . '</a>';
-        }
-        echo '<a href="/" target="_blank" rel="noopener">View site &#8599;</a>';
-        echo '<form method="post" action="/admin/logout.php"><input type="hidden" name="csrf" value="' . h(csrf_token()) . '"><button>Log out</button></form>';
-        echo '</nav></header>';
-    }
+// ---------------------------------------------------------------- html cleaning (pages & posts)
+/** Remove scripts, event handlers and javascript: URLs from editor HTML. Admin-only input, but defence in depth. */
+function clean_html(string $html): string {
+    // Allow embeds only from YouTube and Google Maps
+    $html = preg_replace_callback('~<iframe\b[^>]*>.*?</iframe>~is', function ($m) {
+        return preg_match('~\ssrc="https://(www\.youtube(-nocookie)?\.com/embed/|www\.google\.com/maps/embed)~i', $m[0]) ? $m[0] : '';
+    }, $html);
+    $html = preg_replace('~<\s*(script|object|embed|style)\b[^>]*>.*?<\s*/\s*\1\s*>~is', '', $html);
+    $html = preg_replace('~<\s*(script|object|embed|link|meta|base)\b[^>]*/?>~is', '', $html);
+    $html = preg_replace('~\son[a-z]+\s*=\s*("[^"]*"|\'[^\']*\'|[^\s>]+)~i', '', $html);
+    $html = preg_replace('~(href|src|action)\s*=\s*(["\'])\s*(javascript|vbscript|data):[^"\']*\2~i', '$1="#"', $html);
+    return trim($html);
 }
 
-function admin_footer(): void {
-    echo '</body></html>';
+// ---------------------------------------------------------------- layout
+function admin_header(string $title, string $active = '', bool $wide = false): void {
+    $nav = [
+        'dashboard' => ['/admin/', 'Dashboard', 'chart'],
+        'pages' => ['/admin/pages.php', 'Pages', 'file'],
+        'blog' => ['/admin/blog.php', 'Blog', 'receipt'],
+        'menus' => ['/admin/menus.php', 'Menus', 'clipboard'],
+        'media' => ['/admin/media.php', 'Media', 'sparkle'],
+        'settings' => ['/admin/settings.php', 'Brand &amp; settings', 'store'],
+        'enquiries' => ['/admin/enquiries.php', 'Enquiries', 'mail'],
+        'account' => ['/admin/account.php', 'Account &amp; backups', 'lock'],
+    ];
+    $s = settings();
+    echo '<!doctype html><html lang="en-GB"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">';
+    echo '<meta name="robots" content="noindex, nofollow"><title>' . e($title) . ' · ' . e($s['site_name'] ?? '') . ' admin</title>';
+    echo '<link rel="icon" href="' . e($s['favicon'] ?: '/assets/img/favicon.svg') . '"><link rel="stylesheet" href="/admin/assets/admin.css?v=' . @filemtime(__DIR__ . '/assets/admin.css') . '"></head><body class="' . ($wide ? 'wide' : '') . '">';
+    if (is_logged_in()) {
+        echo '<aside class="side"><a class="brand" href="/admin/"><span class="bmark">' . icon_svg('sparkle') . '</span>' . e($s['site_name'] ?? 'Site') . '<small>admin</small></a><nav>';
+        foreach ($nav as $k => [$href, $label, $ic]) echo '<a href="' . $href . '"' . ($k === $active ? ' class="on"' : '') . '>' . icon_svg($ic) . '<span>' . $label . '</span></a>';
+        echo '</nav><div class="side-foot"><a href="/" target="_blank" rel="noopener">' . icon_svg('globe') . '<span>View site</span></a>'
+            . '<form method="post" action="/admin/logout.php">' . csrf_field() . '<button>' . icon_svg('lock') . '<span>Log out</span></button></form></div></aside>';
+        echo '<div class="shell">';
+        $f = flash();
+        if ($f) echo '<div class="flash ' . e($f[1]) . '">' . e($f[0]) . '</div>';
+    } else {
+        echo '<div class="shell solo">';
+    }
+}
+function admin_footer(): void { echo '</div></body></html>'; }
+
+function icon_options(string $selected): string {
+    $o = '';
+    foreach (icon_names() as $n) $o .= '<option' . ($n === $selected ? ' selected' : '') . '>' . e($n) . '</option>';
+    return $o;
 }

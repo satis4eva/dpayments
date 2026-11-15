@@ -1,118 +1,113 @@
 <?php
 declare(strict_types=1);
 require __DIR__ . '/lib.php';
-header('X-Robots-Tag: noindex, nofollow');
+start_session();
 
-// ---------- Not configured: setup helper ----------
-if (!CONFIGURED) {
-    $hash = '';
-    if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['pw']) && is_string($_POST['pw'])) {
-        if (strlen($_POST['pw']) >= 10) $hash = password_hash($_POST['pw'], PASSWORD_DEFAULT);
+// ---------- First run: create the admin account with the one-time setup code ----------
+if (!has_admin()) {
+    $err = '';
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        if (!check_csrf()) $err = 'Session expired. Please try again.';
+        elseif (too_many_attempts()) $err = 'Too many attempts. Please wait 15 minutes.';
+        else {
+            $code = strtoupper(trim((string)($_POST['code'] ?? '')));
+            $user = trim((string)($_POST['user'] ?? ''));
+            $pass = (string)($_POST['pass'] ?? '');
+            $ok = hash_equals(SETUP_CODE_SHA256, hash('sha256', $code));
+            record_attempt($ok);
+            if (!$ok) $err = 'That setup code is not correct.';
+            elseif (!preg_match('~^[A-Za-z0-9._@-]{3,60}$~', $user)) $err = 'Choose a username of 3–60 letters, numbers, dots or dashes.';
+            elseif (strlen($pass) < 10) $err = 'Use a password of at least 10 characters.';
+            elseif ($pass !== ($_POST['pass2'] ?? '')) $err = 'The passwords do not match.';
+            else {
+                write_json('data/admin.json', ['user' => $user, 'hash' => password_hash($pass, PASSWORD_DEFAULT), 'created' => gmdate('c')]);
+                session_regenerate_id(true);
+                $_SESSION['user'] = $user;
+                flash('Welcome! Your admin account is ready.');
+                redirect('/admin/');
+            }
+        }
     }
     admin_header('Set up');
     ?>
-    <main class="narrow">
-      <div class="panel">
-        <h1>Set up your portal</h1>
-        <p>The portal isn&rsquo;t configured yet. It takes about five minutes:</p>
-        <ol>
-          <li>Choose a strong password below (at least 10 characters) and generate its hash.</li>
-          <li>In Hostinger hPanel &rarr; <strong>File Manager</strong>, open <code>public_html/admin/</code>, copy <code>config.sample.php</code> to <code>config.php</code>.</li>
-          <li>Paste the hash into <code>ADMIN_PASS_HASH</code>, and add your GitHub token (see the README).</li>
-          <li>Reload this page and log in.</li>
-        </ol>
-        <form method="post" class="stack">
-          <label>Password <input type="password" name="pw" minlength="10" required autocomplete="new-password"></label>
-          <button class="btn">Generate hash</button>
-        </form>
-        <?php if ($hash): ?>
-          <p class="mt">Your hash (copy everything):</p>
-          <textarea readonly class="code" rows="2" onclick="this.select()"><?= h($hash) ?></textarea>
-        <?php elseif ($_SERVER['REQUEST_METHOD'] === 'POST'): ?>
-          <p class="err">Please use at least 10 characters.</p>
-        <?php endif; ?>
-      </div>
+    <main class="auth">
+      <form method="post" class="panel stack">
+        <h1>Create your admin account</h1>
+        <p class="muted">Enter the one-time setup code you were given, then choose your login. The code stops working once your account exists.</p>
+        <?php if ($err): ?><p class="err"><?= e($err) ?></p><?php endif; ?>
+        <?= csrf_field() ?>
+        <label>Setup code <input name="code" required autocomplete="off" placeholder="XXXXX-XXXXX-XXXXX-XXXXX"></label>
+        <label>Username <input name="user" required autocomplete="username" value="<?= e($_POST['user'] ?? '') ?>"></label>
+        <label>Password <input type="password" name="pass" required minlength="10" autocomplete="new-password"></label>
+        <label>Confirm password <input type="password" name="pass2" required minlength="10" autocomplete="new-password"></label>
+        <button class="btn">Create account</button>
+      </form>
     </main>
-    <?php
-    admin_footer();
-    exit;
+    <?php admin_footer(); exit;
 }
-
-start_session();
 
 // ---------- Login ----------
 if (!is_logged_in()) {
-    $error = '';
+    $err = '';
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        if (!check_csrf($_POST['csrf'] ?? null)) {
-            $error = 'Your session expired. Please try again.';
-        } elseif (too_many_attempts()) {
-            $error = 'Too many attempts. Please wait 15 minutes.';
-        } else {
-            $u = (string)($_POST['user'] ?? '');
-            $p = (string)($_POST['pass'] ?? '');
-            $ok = ADMIN_PASS_HASH !== '' && hash_equals(ADMIN_USER, $u) && password_verify($p, ADMIN_PASS_HASH);
+        if (!check_csrf()) $err = 'Session expired. Please try again.';
+        elseif (too_many_attempts()) $err = 'Too many attempts. Please wait 15 minutes.';
+        else {
+            $a = admin_account();
+            $ok = hash_equals((string)$a['user'], (string)($_POST['user'] ?? '')) && password_verify((string)($_POST['pass'] ?? ''), (string)$a['hash']);
             record_attempt($ok);
             if ($ok) {
-                session_regenerate_id(true);
-                $_SESSION['user'] = $u;
-                header('Location: /admin/');
-                exit;
+                if (password_needs_rehash($a['hash'], PASSWORD_DEFAULT)) { $a['hash'] = password_hash((string)$_POST['pass'], PASSWORD_DEFAULT); write_json('data/admin.json', $a); }
+                session_regenerate_id(true); $_SESSION['user'] = $a['user']; redirect('/admin/');
             }
-            usleep(400000);
-            $error = 'Incorrect username or password.';
+            usleep(400000); $err = 'Incorrect username or password.';
         }
     }
     admin_header('Log in');
     ?>
-    <main class="login">
+    <main class="auth">
       <form method="post" class="panel stack">
-        <img src="/assets/img/logo.svg" alt="DPayments" class="logo">
-        <h1>Website portal</h1>
-        <?php if ($error): ?><p class="err"><?= h($error) ?></p><?php endif; ?>
-        <input type="hidden" name="csrf" value="<?= h(csrf_token()) ?>">
+        <div class="auth-logo"><?= logo_html() ?></div>
+        <h1>Log in</h1>
+        <?php if ($err): ?><p class="err"><?= e($err) ?></p><?php endif; ?>
+        <?= csrf_field() ?>
         <label>Username <input name="user" required autocomplete="username"></label>
         <label>Password <input type="password" name="pass" required autocomplete="current-password"></label>
         <button class="btn">Log in</button>
       </form>
     </main>
-    <?php
-    admin_footer();
-    exit;
+    <?php admin_footer(); exit;
 }
 
 // ---------- Dashboard ----------
-$pages = list_pages();
-$enq = read_enquiries();
-$groups = [];
-foreach ($pages as $rel => $title) {
-    $top = strpos($rel, '/') === false ? 'Main pages' : explode('/', $rel)[0];
-    $label = ['Main pages' => 'Main pages', 'solutions' => 'Solutions', 'industries' => 'Industries'][$top] ?? 'Main pages';
-    $groups[$label][$rel] = $title;
-}
-admin_header('Pages', 'pages');
+$pages = pages(); $posts = posts(); $enq = read_enquiries();
+$published = count(array_filter($posts, fn($p) => ($p['status'] ?? '') === 'published'));
+admin_header('Dashboard', 'dashboard');
 ?>
 <main>
-  <div class="head">
-    <div>
-      <h1>Pages</h1>
-      <p class="muted">Click a page to edit its text. Changes go live about a minute after you save<?= storage_mode() === 'github' ? ' (published through GitHub)' : '' ?>.</p>
-    </div>
-    <a class="stat" href="/admin/enquiries.php"><b><?= count($enq) ?></b> enquir<?= count($enq) === 1 ? 'y' : 'ies' ?></a>
+  <div class="head"><div><h1>Dashboard</h1><p class="muted">Manage everything on <?= e(preg_replace('~^https?://~', '', settings()['site_url'] ?? '')) ?> from here.</p></div></div>
+  <div class="stats">
+    <a class="stat" href="/admin/pages.php"><b><?= count($pages) ?></b><span>Pages</span></a>
+    <a class="stat" href="/admin/blog.php"><b><?= $published ?></b><span>Published posts</span></a>
+    <a class="stat" href="/admin/enquiries.php"><b><?= count($enq) ?></b><span>Enquiries</span></a>
+    <a class="stat" href="/admin/media.php"><b><?= count(media_list()) ?></b><span>Images</span></a>
   </div>
-  <?php if (storage_mode() === 'github' && (!defined('GITHUB_TOKEN') || GITHUB_TOKEN === '')): ?>
-    <p class="err">GitHub token missing in <code>admin/config.php</code> &mdash; you won&rsquo;t be able to save until it&rsquo;s added.</p>
+  <h2>Quick actions</h2>
+  <div class="tiles">
+    <a class="tile" href="/admin/pages.php#new"><?= icon_svg('file') ?><b>Add a page</b><small>Start from a template</small></a>
+    <a class="tile" href="/admin/post.php"><?= icon_svg('receipt') ?><b>Write a blog post</b><small>News, guides, updates</small></a>
+    <a class="tile" href="/admin/menus.php"><?= icon_svg('clipboard') ?><b>Edit menus</b><small>Header and footer links</small></a>
+    <a class="tile" href="/admin/settings.php#brand"><?= icon_svg('store') ?><b>Logo &amp; theme</b><small>Colours, fonts, logo</small></a>
+    <a class="tile" href="/admin/settings.php#contact"><?= icon_svg('phone') ?><b>Contact details</b><small>Phone, address, email</small></a>
+    <a class="tile" href="/admin/settings.php#social"><?= icon_svg('users') ?><b>Social media</b><small>Links in the footer</small></a>
+  </div>
+  <?php if ($enq): ?>
+  <h2>Latest enquiries</h2>
+  <div class="list">
+    <?php foreach (array_slice($enq, 0, 5) as $r): ?>
+      <a class="row" href="/admin/enquiries.php"><span><b><?= e($r['name'] ?? '') ?></b><?= !empty($r['business']) ? ' · ' . e($r['business']) : '' ?><small><?= e($r['email'] ?? '') ?></small></span><small><?= e($r['date'] ?? '') ?></small></a>
+    <?php endforeach; ?>
+  </div>
   <?php endif; ?>
-  <?php foreach ($groups as $g => $items): ?>
-    <h2><?= h($g) ?></h2>
-    <div class="list">
-      <?php foreach ($items as $rel => $title): ?>
-        <a class="row" href="/admin/edit.php?p=<?= h(rawurlencode($rel)) ?>">
-          <span><b><?= h(preg_replace('~\s*\|.*$~', '', $title)) ?></b><small><?= h(page_url($rel)) ?></small></span>
-          <span class="go">Edit &rarr;</span>
-        </a>
-      <?php endforeach; ?>
-    </div>
-  <?php endforeach; ?>
 </main>
 <?php admin_footer();

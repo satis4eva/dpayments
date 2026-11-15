@@ -1,4 +1,4 @@
-# Portal secrets and runtime data — keep on the server only
-admin/config.php
-admin/data/*
-!admin/data/.htaccess
+# Site content and uploads live on the server only (edited through /admin/)
+/content/
+/uploads/*
+!/uploads/.htaccess

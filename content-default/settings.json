@@ -1,0 +1,49 @@
+{
+ "site_name": "DPayments",
+ "site_url": "https://dpayments.co.uk",
+ "tagline": "Independent UK payments partner. We help businesses take card payments in person, online and over the phone — and help existing merchants cut what they pay.",
+ "logo": "",
+ "logo_dark": "",
+ "favicon": "/assets/img/favicon.svg",
+ "theme": {
+  "accent": "#0e9c74",
+  "accent_dark": "#076149",
+  "ink": "#0d1b26",
+  "bg": "#f6f7f4",
+  "heading_font": "Manrope",
+  "body_font": "Inter",
+  "radius": 14
+ },
+ "contact": {
+  "email": "info@dpayments.co.uk",
+  "phone": "",
+  "whatsapp": "",
+  "address": "",
+  "hours": "",
+  "company_name": "",
+  "company_number": "",
+  "registered_address": ""
+ },
+ "social": {
+  "linkedin": "",
+  "facebook": "",
+  "instagram": "",
+  "x": "",
+  "youtube": "",
+  "tiktok": ""
+ },
+ "topbar": {
+  "enabled": false,
+  "text": ""
+ },
+ "footer_note": "Payments partner for UK business.",
+ "form_from": "noreply@dpayments.co.uk",
+ "analytics": {
+  "ga4": "",
+  "google_verification": ""
+ },
+ "blog": {
+  "title": "Insights",
+  "intro": "News, guides and plain-English explainers on payments."
+ }
+}

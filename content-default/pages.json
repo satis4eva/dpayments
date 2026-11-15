@@ -1,0 +1,242 @@
+{
+ "home": {
+  "title": "DPayments | Every Payment Method, All in One Place",
+  "description": "One partner for every way to get paid: card machines, online checkout, payment links, wallets, pay by bank, multi-currency, payouts, orchestration and crypto. Independent UK payments partner.",
+  "noindex": false,
+  "core": true,
+  "schema": "<script type=\"application/ld+json\">{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"DPayments\",\"url\":\"https://dpayments.co.uk\",\"email\":\"info@dpayments.co.uk\",\"logo\":\"https://dpayments.co.uk/assets/img/logo.svg\",\"description\":\"Independent UK payments partner: every payment method, all in one place.\",\"areaServed\":[\"GB\",\"EU\"]}</script>",
+  "nav": ""
+ },
+ "card-machines": {
+  "title": "Card Machines for UK Businesses | Countertop, Portable & 4G Terminals | DPayments",
+  "description": "Countertop, portable, 4G mobile, unattended, EPOS-integrated and pay-at-table card machines. We help you choose, set up and get fair contract terms. Get a quote from DPayments.",
+  "noindex": false,
+  "core": false,
+  "schema": "",
+  "nav": "/card-machines/"
+ },
+ "online-payments": {
+  "title": "Online Payments, Payment Links & Virtual Terminal | DPayments",
+  "description": "Hosted checkout, payment links, virtual terminal (MOTO), recurring billing and digital wallets for UK businesses. Set up properly with 3D Secure 2, chargeback guidance and clear settlement terms.",
+  "noindex": false,
+  "core": false,
+  "schema": "",
+  "nav": "/online-payments/"
+ },
+ "switch": {
+  "title": "Switch & Save: Free Merchant Statement Review | DPayments",
+  "description": "Already taking card payments? Send us a recent statement and we'll explain every line, separate real costs from provider margin, and tell you plainly whether you could pay less.",
+  "noindex": false,
+  "core": false,
+  "schema": "",
+  "nav": "/switch/"
+ },
+ "how-it-works": {
+  "title": "How It Works | Four Steps to the Right Payments Setup | DPayments",
+  "description": "How DPayments works: we understand your business, compare acquirers, gateways and terminals, handle setup and onboarding, then keep an eye on your pricing. Honest timelines, no jargon.",
+  "noindex": false,
+  "core": false,
+  "schema": "",
+  "nav": "/how-it-works/"
+ },
+ "industries": {
+  "title": "Payment Solutions by Industry | Retail, Hospitality, Trades & More | DPayments",
+  "description": "Card machines and online payments set up for how your sector trades: retail, hospitality, trades, ecommerce, professional services, health and beauty, events, memberships and travel.",
+  "noindex": false,
+  "core": false,
+  "schema": "",
+  "nav": "/industries/"
+ },
+ "faq": {
+  "title": "Merchant Services, Explained | Card Payments FAQ | DPayments",
+  "description": "Plain-English answers on card payments: merchant accounts, acquirers, PCI DSS, 3D Secure, chargebacks, settlement, interchange and contracts.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"What is a merchant account?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"A bank-style account that receives the money from your card sales first, before it moves into your normal business current account. It sits between the card networks and your bank, and may be bundled with a terminal or checkout, or kept separate.\"}}, {\"@type\": \"Question\", \"name\": \"What’s the difference between an acquirer, a PSP and a gateway?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"An acquirer is licensed by the card schemes to settle transactions and carries the underwriting risk. A gateway securely passes transaction data to the acquirer. A PSP (payment service provider) packages a gateway, and sometimes acquiring, into a single product. One company can perform several of these roles.\"}}, {\"@type\": \"Question\", \"name\": \"What is a MID?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"A Merchant Identification number — a unique ID for your business in the acquirer’s systems. It links your transactions, settlements and disputes to you. A business can have several, for example one per site or trading channel.\"}}, {\"@type\": \"Question\", \"name\": \"Can I take payments without a website?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Yes. A virtual terminal lets you key in card details on a secure page for phone or mail-order payments, and payment links send a one-off hosted payment page by text or email. Both suit invoices, deposits and phone orders.\"}}, {\"@type\": \"Question\", \"name\": \"Can I take Apple Pay and Google Pay?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Yes. Modern contactless terminals accept Apple Pay and Google Pay just like a contactless card, and most hosted checkouts can show them as one-tap options on mobile.\"}}, {\"@type\": \"Question\", \"name\": \"I’m a new business with no trading history. Can I still take cards?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Usually, yes. Providers will look more closely at your plans, and some may start you on slower settlement or hold a small reserve until you’ve built up a history. We’ll tell you what to expect before you apply.\"}}, {\"@type\": \"Question\", \"name\": \"Why am I asked for ID, bank statements and business details?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Providers must run Know-Your-Customer (KYC) and anti-money-laundering (AML) checks. These confirm who owns and runs the business, which bank account will receive settlements, and what you sell. It’s an industry-wide regulatory requirement — and the main factor in how quickly you can go live.\"}}, {\"@type\": \"Question\", \"name\": \"What is PCI DSS and what do I actually have to do?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"The Payment Card Industry Data Security Standard sets rules for handling card data. Most smaller merchants comply by completing an annual Self-Assessment Questionnaire (SAQ) and using compliant terminals or hosted checkouts, so raw card numbers stay off their systems. The less card data you handle, the fewer obligations you have. Lapsed compliance can trigger provider fees, so keep it current.\"}}, {\"@type\": \"Question\", \"name\": \"What is 3D Secure 2?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"3DS2 is the authentication step in online card payments, where a customer may confirm a purchase in their banking app. It shifts fraud liability on authenticated transactions to the card issuer and is generally required for most UK and EU online payments under Strong Customer Authentication rules. Good setups only challenge risky payments.\"}}, {\"@type\": \"Question\", \"name\": \"What do I need on my website to take online payments?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Providers typically expect clear products and prices, terms and conditions, a refund and returns policy, a privacy policy, contact details and HTTPS across the site. We’ll check these with you before applying.\"}}, {\"@type\": \"Question\", \"name\": \"What is a chargeback, and how do I fight one?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"A chargeback is when a cardholder’s bank reverses a payment while it investigates a dispute. To defend it, you provide evidence the transaction was legitimate — receipts, proof of delivery, communications and authorisation records. Clear refund policies and fraud checks are the cheapest way to reduce chargebacks.\"}}, {\"@type\": \"Question\", \"name\": \"What does settlement in T+1 vs T+3 mean?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"It’s how long cleared funds take to reach your bank after a sale: one business day for T+1, three for T+3. Authorisation takes about a second, but bank transfers take days. Timing depends on the acquirer, the card scheme and your account terms.\"}}, {\"@type\": \"Question\", \"name\": \"What is a rolling reserve?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"A percentage of your takings held back by the provider for a set period, to cover potential refunds or chargebacks. It’s more common for new businesses, online sellers and those taking payment well before delivery. It should be disclosed up front, along with how and when it’s released.\"}}, {\"@type\": \"Question\", \"name\": \"What is interchange, and what is interchange++ pricing?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Interchange is a wholesale fee set by the card networks and paid to the cardholder’s bank — no provider can waive it. Scheme fees go to Visa and Mastercard, and the acquirer adds its own margin. Interchange++ itemises all three so you can see the cost and the markup separately. Blended pricing combines them into one rate, which is simpler but less transparent.\"}}, {\"@type\": \"Question\", \"name\": \"What’s the difference between blended and interchange-plus pricing?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Blended pricing applies one flat rate to all card types. Interchange-plus passes through the actual interchange and scheme fees and adds a fixed, visible margin. Blended is more predictable; interchange-plus is more transparent and can be cheaper depending on your card mix.\"}}, {\"@type\": \"Question\", \"name\": \"What is an authorisation fee?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"A small per-transaction charge for checking a card is valid and has funds, separate from the percentage rate. It applies even to low-value payments and can make a headline rate look cheaper than the true cost.\"}}, {\"@type\": \"Question\", \"name\": \"What should I watch for in a card payments contract?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Check the minimum term and auto-renewal, whether terminal rental is separate and how long it lasts, minimum monthly charges, PCI non-compliance fees and early-exit charges. These often add more cost than the headline rate, so terminal terms deserve the same scrutiny as transaction rates.\"}}, {\"@type\": \"Question\", \"name\": \"Do I need a different setup to take American Express or international cards?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Sometimes. Amex is often priced and enabled separately from Visa and Mastercard. International and commercial cards usually carry higher interchange, so share your typical card mix when asking for a quote.\"}}, {\"@type\": \"Question\", \"name\": \"Can I switch provider if I’m still in a contract?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"It depends on your terms. Sometimes waiting for the notice window is cheapest; sometimes the savings outweigh an exit fee. Send us your statement and agreement and we’ll work out which applies to you.\"}}]}</script>",
+  "nav": "/faq/"
+ },
+ "contact": {
+  "title": "Get a Quote | DPayments",
+  "description": "Request a tailored card payments quote or a review of what you pay today. One short form, a reply by email, no pressure.",
+  "noindex": false,
+  "core": true,
+  "schema": "",
+  "nav": "/contact/"
+ },
+ "thank-you": {
+  "title": "Thank you | DPayments",
+  "description": "Thanks for your enquiry. We'll reply by email.",
+  "noindex": true,
+  "core": true,
+  "schema": "",
+  "nav": ""
+ },
+ "privacy": {
+  "title": "Privacy Notice | DPayments",
+  "description": "How DPayments handles the information you share through dpayments.co.uk.",
+  "noindex": false,
+  "core": true,
+  "schema": "",
+  "nav": ""
+ },
+ "terms": {
+  "title": "Terms of Use | DPayments",
+  "description": "Terms of use for dpayments.co.uk.",
+  "noindex": false,
+  "core": true,
+  "schema": "",
+  "nav": ""
+ },
+ "cookies": {
+  "title": "Cookie Policy | DPayments",
+  "description": "Cookies used on dpayments.co.uk.",
+  "noindex": false,
+  "core": true,
+  "schema": "",
+  "nav": ""
+ },
+ "404": {
+  "title": "Page not found | DPayments",
+  "description": "Page not found.",
+  "noindex": true,
+  "core": true,
+  "schema": "",
+  "nav": ""
+ },
+ "solutions": {
+  "title": "Payment Solutions | Gateway, POS, Payouts, Orchestration | DPayments",
+  "description": "Online payment gateway, POS, multi-currency, digital wallets, settlements, card payouts, payment orchestration and fraud management, arranged by an independent UK payments partner.",
+  "noindex": false,
+  "core": false,
+  "schema": "",
+  "nav": "/solutions/"
+ },
+ "solutions/multi-currency": {
+  "title": "Multi-Currency Payment Acceptance | DPayments",
+  "description": "Accept card payments in your customers' local currencies, reduce cross-border friction and choose how and where you settle. Arranged by DPayments.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"Do I need a bank account in every currency?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"No. You can convert to your home currency at settlement. If you have costs in another currency, settling into a matching account can save you a second conversion.\"}}, {\"@type\": \"Question\", \"name\": \"Which currencies can I accept?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"It depends on the provider, but all the major currencies are widely supported. Tell us which markets you sell into and we’ll check coverage.\"}}, {\"@type\": \"Question\", \"name\": \"Is multi-currency more expensive?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"International cards usually carry higher interchange whatever currency you charge in. What varies most between providers is the FX margin, which is why we compare it.\"}}]}</script>",
+  "nav": "/solutions/multi-currency/"
+ },
+ "solutions/digital-wallets": {
+  "title": "Apple Pay, Google Pay & Click to Pay for Business | DPayments",
+  "description": "Accept Apple Pay, Google Pay and Click to Pay in store and online. Faster checkout, fewer abandoned baskets and strong authentication built in.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"Do wallet payments cost more than cards?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Generally no. A wallet payment is still a card payment, priced at the underlying card’s rate.\"}}, {\"@type\": \"Question\", \"name\": \"Do I need a new card machine?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Not if it’s contactless. Phone and watch payments work on any modern contactless terminal.\"}}, {\"@type\": \"Question\", \"name\": \"Is Click to Pay the same as Apple Pay?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"No. Apple Pay and Google Pay are device wallets. Click to Pay is a card-scheme service that lets shoppers use cards saved to their scheme profile on any device or browser.\"}}]}</script>",
+  "nav": "/solutions/digital-wallets/"
+ },
+ "solutions/card-payouts": {
+  "title": "Card Payouts: Send Funds to Visa & Mastercard Cards | DPayments",
+  "description": "Send withdrawals, winnings, refunds and disbursements directly to customers' debit and credit cards, often within minutes. Arranged through DPayments' partners.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"How fast are card payouts?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Many eligible cards receive funds within minutes. Some issuers take longer; the provider can tell you what to expect by card type and country.\"}}, {\"@type\": \"Question\", \"name\": \"Can I pay out to any card?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Most Visa and Mastercard debit cards are eligible, and many credit cards too. Coverage varies by issuer and country.\"}}, {\"@type\": \"Question\", \"name\": \"Is this the same as a refund?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"No. A refund reverses a previous payment. A payout is a new transfer, which lets you send amounts that differ from the original deposit, such as winnings or profits.\"}}]}</script>",
+  "nav": "/solutions/card-payouts/"
+ },
+ "solutions/settlements": {
+  "title": "Multi-Currency & Stablecoin Settlements | DPayments",
+  "description": "Choose how, when and in which currency you're paid. Fiat settlement in multiple currencies, faster payout options and stablecoin settlement through partners.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"What does T+1 mean?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Funds reach your account one business day after the transaction date. T+2 is two days, and so on.\"}}, {\"@type\": \"Question\", \"name\": \"Why would a provider hold a reserve?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"To cover potential refunds and chargebacks. It’s more common for new businesses, online sellers and higher-risk sectors. It should always be disclosed before you sign.\"}}, {\"@type\": \"Question\", \"name\": \"Does DPayments hold my money?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"No. Settlement is always made directly to you by the acquirer or partner. We don’t hold or touch merchant funds.\"}}]}</script>",
+  "nav": "/solutions/settlements/"
+ },
+ "solutions/risk-fraud": {
+  "title": "Risk, Fraud & Security: 3D Secure, PCI, P2PE & Network Tokens | DPayments",
+  "description": "Stop fraud before it becomes a chargeback. Fraud screening, 3D Secure 2, network tokens, chargeback alerts and dispute support, arranged by DPayments.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"Does 3D Secure hurt conversion?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Older versions did. 3DS2 uses risk data so most customers are approved without a challenge, and those who are challenged usually confirm in their banking app.\"}}, {\"@type\": \"Question\", \"name\": \"What chargeback rate is too high?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Thresholds vary by scheme and change over time, but as a rule of thumb, staying well below 1% of transactions is important. Specialist sectors are watched more closely.\"}}, {\"@type\": \"Question\", \"name\": \"Can you help if I already have a chargeback problem?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Yes. We’ll look at where disputes are coming from and recommend fixes — from descriptors and refund policy to screening rules and alerts.\"}}]}</script>",
+  "nav": "/solutions/risk-fraud/"
+ },
+ "solutions/orchestration": {
+  "title": "Payment Orchestration & Smart Routing | DPayments",
+  "description": "Connect multiple acquirers and payment methods through one integration. Smart routing, failover, tokenisation and unified reporting to lift approvals and cut costs.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"Do I need orchestration?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Not always. For a single shop or modest online volume, one good provider is simpler. Orchestration pays off as volume, markets and the cost of downtime grow. We’ll tell you honestly which camp you’re in.\"}}, {\"@type\": \"Question\", \"name\": \"Will I need to rebuild my checkout?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Usually you integrate once with the orchestration platform, and adding providers afterwards is configuration rather than development.\"}}, {\"@type\": \"Question\", \"name\": \"Does orchestration replace my acquirer?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"No. It sits in front of your acquirers and PSPs. You still need merchant accounts with the providers it routes to — which we can help arrange.\"}}]}</script>",
+  "nav": "/solutions/orchestration/"
+ },
+ "solutions/integration": {
+  "title": "Payment Integration: Plugins, Hosted Pages & APIs | DPayments",
+  "description": "Connect payments to your website, app or software the way that suits you: no-code payment links, ecommerce plugins, hosted payment pages, SDKs or full APIs.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"Which integration has the least PCI work?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Payment links and hosted payment pages, because card data never touches your systems. A full server-to-server API carries the most responsibility.\"}}, {\"@type\": \"Question\", \"name\": \"Can you build the integration for us?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Our team at DBS Group builds websites and apps, so if you need development help we can scope it with you.\"}}, {\"@type\": \"Question\", \"name\": \"Do I need a developer for a plugin?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Usually not. Most ecommerce plugins can be installed and configured by anyone comfortable with their store’s admin panel.\"}}]}</script>",
+  "nav": "/solutions/integration/"
+ },
+ "solutions/payment-methods": {
+  "title": "Payment Methods: Cards, Apple Pay, PayPal, Klarna & Open Banking | DPayments",
+  "description": "Accept the payment methods your customers prefer: Visa, Mastercard, Amex, Apple Pay, Google Pay, PayPal, buy now pay later, open banking and local methods.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"Does offering buy now, pay later cost more?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"BNPL providers usually charge the merchant a higher fee than cards, in exchange for paying you upfront and carrying the repayment risk. It can pay off on higher-value items.\"}}, {\"@type\": \"Question\", \"name\": \"Can I take PayPal through my card provider?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Many gateways offer PayPal as an option on the same checkout and reporting, so you don’t need a separate integration.\"}}, {\"@type\": \"Question\", \"name\": \"Is open banking cheaper than cards?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Often, yes, especially for larger payments. But not every customer is comfortable with it yet, so it works best alongside cards.\"}}]}</script>",
+  "nav": "/solutions/payment-methods/"
+ },
+ "solutions/epos": {
+  "title": "ePOS Systems for Retail & Hospitality, Integrated with Card Payments | DPayments",
+  "description": "Till systems for shops, restaurants, bars and hotels, integrated with your card machines. Stock, tables, staff and reporting in one place. Compared and arranged by DPayments.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"Can I keep my existing ePOS?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Often, yes. Many ePOS systems integrate with several payment providers. We check which providers your system supports before recommending anything.\"}}, {\"@type\": \"Question\", \"name\": \"Is ePOS hardware bought or rented?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Both models exist, and software is usually a monthly subscription. As with card machines, we set out the full cost and contract terms.\"}}, {\"@type\": \"Question\", \"name\": \"Do I need integrated payments?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"For busy venues, it saves time and errors. For a small shop with one till, a standalone card machine can be simpler and cheaper.\"}}]}</script>",
+  "nav": "/solutions/epos/"
+ },
+ "solutions/loyalty": {
+  "title": "Loyalty, Rewards & Smart Receipts for Card Payments | DPayments",
+  "description": "Card-linked loyalty, digital rewards and smart receipts that turn payments into repeat visits. Options compared and arranged by DPayments.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"Do customers need to download an app?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Not with card-linked loyalty. They’re recognised by the card they pay with, once they’ve opted in.\"}}, {\"@type\": \"Question\", \"name\": \"Is this GDPR-friendly?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Good schemes are opt-in and transparent about what’s collected. We only recommend providers that handle consent properly.\"}}]}</script>",
+  "nav": "/solutions/loyalty/"
+ },
+ "solutions/business-funding": {
+  "title": "Merchant Cash Advance & Business Funding | DPayments",
+  "description": "Business funding repaid as a percentage of your card sales. Introduced through specialist funding partners. Subject to status and eligibility.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"Who is eligible?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Typically UK businesses that have taken card payments for several months with consistent turnover. Each funding partner sets its own criteria.\"}}, {\"@type\": \"Question\", \"name\": \"Is DPayments the lender?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"No. Funding is provided by third-party funders, subject to status, affordability and their terms. We may receive a commission for introductions.\"}}, {\"@type\": \"Question\", \"name\": \"Is a cash advance a loan?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"A merchant cash advance is usually structured as the purchase of a share of your future card sales rather than a loan, but read each funder’s terms carefully and take independent advice if unsure.\"}}]}</script>",
+  "nav": "/solutions/business-funding/"
+ },
+ "industries/igaming": {
+  "title": "iGaming Payment Solutions for Licensed Operators | DPayments",
+  "description": "Payment processing for licensed casino, sportsbook, lottery and gaming operators: deposits, fast payouts, multi-currency, orchestration and risk tools via specialist partners.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"Do you work with unlicensed operators?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"No. Every partner we introduce requires a valid licence for the markets you operate in.\"}}, {\"@type\": \"Question\", \"name\": \"Why do gaming merchants need more than one acquirer?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Acquirer appetite for gaming changes, and a single provider is a single point of failure. Orchestration across several providers protects your approval rates and keeps you trading.\"}}, {\"@type\": \"Question\", \"name\": \"Will there be a reserve?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Often, especially for new operators. The size and duration depend on your history and the partner. We get it disclosed and negotiated up front.\"}}]}</script>",
+  "nav": "/industries/igaming/"
+ },
+ "industries/forex": {
+  "title": "Forex & CFD Broker Payment Solutions | DPayments",
+  "description": "Client deposits and withdrawals for regulated forex and CFD brokers: cards, open banking, card payouts, multi-currency settlement and orchestration via specialist partners.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"Can withdrawals go back to cards?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Yes. Card payouts let you return funds to the card a client deposited with, which is often required for AML reasons.\"}}, {\"@type\": \"Question\", \"name\": \"Do you work with offshore brokers?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"We work with brokers regulated in recognised jurisdictions. Partner appetite varies, so tell us where you’re licensed.\"}}]}</script>",
+  "nav": "/industries/forex/"
+ },
+ "industries/financial-brokerage": {
+  "title": "Payment Solutions for Financial Brokerage & Investment Platforms | DPayments",
+  "description": "Secure payment acceptance and payouts for investment platforms, wealth managers and financial brokers. Open banking, cards, payouts and multi-currency via specialist partners.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"Why open banking for investments?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"It suits larger payments: lower costs than cards on big amounts, instant confirmation and no card-style chargebacks.\"}}, {\"@type\": \"Question\", \"name\": \"Do partners work with new platforms?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Some do, depending on your regulatory status, ownership and business plan. We’ll tell you who is likely to support you.\"}}]}</script>",
+  "nav": "/industries/financial-brokerage/"
+ },
+ "partners": {
+  "title": "Partner with DPayments | Referral & Reseller Partnerships",
+  "description": "Accountants, ePOS and software providers, web agencies and consultants: refer clients to DPayments and earn a share. Simple referral and reseller partnerships.",
+  "noindex": false,
+  "core": false,
+  "schema": "",
+  "nav": "/partners/"
+ },
+ "crypto": {
+  "title": "Crypto Payments for iGaming & High-Risk Merchants | DPayments",
+  "description": "Accept USDT, USDC, ETH, BNB and TRX across TRC20, ERC20 and BEP20. Real-time settlement, API collections and payouts, through licensed gateway partners. Apply with DPayments.",
+  "noindex": false,
+  "core": false,
+  "schema": "<script type=\"application/ld+json\">{\"@context\": \"https://schema.org\", \"@type\": \"FAQPage\", \"mainEntity\": [{\"@type\": \"Question\", \"name\": \"Which coins and networks are supported?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"USDT, USDC, ETH, BNB and TRX across TRC20, ERC20 and BEP20. Ask us if you need others.\"}}, {\"@type\": \"Question\", \"name\": \"Does DPayments hold my funds?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"No. DPayments acts as an introducer only. You contract directly with the payment provider, and we never hold, receive or transfer client funds.\"}}, {\"@type\": \"Question\", \"name\": \"Can I also take card payments?\", \"acceptedAnswer\": {\"@type\": \"Answer\", \"text\": \"Yes. Many merchants combine crypto with cards, wallets and open banking. See our iGaming and solutions pages.\"}}]}</script>",
+  "nav": "/crypto/"
+ }
+}
