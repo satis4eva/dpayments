@@ -1,0 +1,6 @@
+# crypto.dpayments.co.uk has moved into the main site
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^ https://dpayments.co.uk/crypto/ [R=301,L]
+</IfModule>
+Redirect 301 / https://dpayments.co.uk/crypto/
