@@ -98,7 +98,7 @@ tiles = "".join([
     tile("/solutions/orchestration/", "t-ink big", "refresh", "Orchestration", "Smart routing, many providers",
          '<div class="art-route"><span class="src">Payment</span><svg viewBox="0 0 200 120" preserveAspectRatio="none"><path d="M10 60 C80 60 90 15 190 15"/><path d="M10 60 C80 60 90 60 190 60"/><path d="M10 60 C80 60 90 105 190 105"/></svg>'
          '<span class="dst d1">Acquirer A</span><span class="dst d2 on">Acquirer B &#10003;</span><span class="dst d3">Acquirer C</span></div>'),
-    tile("https://crypto.dpayments.co.uk", "t-gold big", "sparkle", "Crypto", "Crypto &amp; stablecoin",
+    tile("/crypto/", "t-gold big", "sparkle", "Crypto", "Crypto &amp; stablecoin",
          '<div class="art-coin"><span>&#8383;</span><span class="c2">&#926;</span><span class="c3">$</span></div>'),
 ])
 

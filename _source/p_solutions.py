@@ -24,7 +24,7 @@ def overview():
             for h, i, t, d in items if h != "/solutions/")
         groups += f'''<div class="mt-l"><h2 style="font-size:1.5rem;margin-bottom:20px">{title}</h2><div class="grid g3">{cards}</div></div>'''
     groups += f'''<div class="mt-l"><h2 style="font-size:1.5rem;margin-bottom:20px">Crypto</h2><div class="grid g3">
-      <a class="card reveal" href="https://crypto.dpayments.co.uk">{icon("sparkle")}<h3>Crypto payments</h3><p>Accept crypto from your customers through our crypto gateway partners.</p><span class="more">Visit crypto.dpayments.co.uk &#8599;</span></a></div></div>'''
+      <a class="card reveal" href="/crypto/">{icon("sparkle")}<h3>Crypto payments</h3><p>Accept crypto from your customers through our crypto gateway partners.</p><span class="more">Crypto payments {ARROW}</span></a></div></div>'''
     body = f'''<section class="page-hero">
   <div class="container">
     <div class="crumbs"><a href="/">Home</a> / Solutions</div>
@@ -155,7 +155,7 @@ STABLE = f'''<section id="stablecoin" style="scroll-margin-top:90px">
       <h2>Faster cross-border settlement, through partners.</h2>
       <p class="lede">For businesses with international flows, some partners can settle your card takings in regulated stablecoins such as USDC, alongside or instead of fiat. That can mean faster access to funds across borders and outside banking hours.</p>
       <p>We act as an introducer only: settlement is provided by the partner, and we never hold your funds. Stablecoins carry their own risks, and whether this is suitable depends on your business, your jurisdiction and your accounting setup.</p>
-      <div class="btn-row mt-m"><a class="btn btn-primary" href="/contact/">Ask about stablecoin settlement {ARROW}</a><a class="text-link" href="https://crypto.dpayments.co.uk">Crypto payments &#8599;</a></div>
+      <div class="btn-row mt-m"><a class="btn btn-primary" href="/contact/">Ask about stablecoin settlement {ARROW}</a><a class="text-link" href="/crypto/">Crypto payments</a></div>
     </div>
     <div class="card card-lg reveal">
       <h3>Why businesses consider it</h3>

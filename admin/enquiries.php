@@ -10,10 +10,10 @@ if (isset($_GET['csv'])) {
     header('Content-Type: text/csv; charset=utf-8');
     header('Content-Disposition: attachment; filename="dpayments-enquiries-' . date('Y-m-d') . '.csv"');
     $out = fopen('php://output', 'w');
-    fputcsv($out, ['Date (UTC)', 'Form', 'Name', 'Email', 'Business', 'Phone', 'Industry', 'Turnover', 'Takes payments', 'Message']);
+    fputcsv($out, ['Date (UTC)', 'Form', 'Name', 'Email', 'Business', 'Phone', 'Website', 'Industry', 'Turnover', 'Takes payments', 'Message']);
     foreach ($rows as $r) {
         $cells = [$r['date'] ?? '', $r['source'] ?? '', $r['name'] ?? '', $r['email'] ?? '', $r['business'] ?? '',
-            $r['phone'] ?? '', $r['industry'] ?? '', $r['turnover'] ?? '', implode(', ', $r['channels'] ?? []), $r['message'] ?? ''];
+            $r['phone'] ?? '', $r['site'] ?? '', $r['industry'] ?? '', $r['turnover'] ?? '', implode(', ', $r['channels'] ?? []), $r['message'] ?? ''];
         // Prevent spreadsheet formula injection
         $cells = array_map(fn($c) => preg_match('/^[=+\-@]/', (string)$c) ? "'" . $c : $c, $cells);
         fputcsv($out, $cells);
@@ -40,11 +40,11 @@ admin_header('Enquiries', 'enquiries');
         <summary>
           <span><b><?= h($r['name'] ?? '') ?></b><?= !empty($r['business']) ? ' &middot; ' . h($r['business']) : '' ?>
             <small><?= h($r['email'] ?? '') ?></small></span>
-          <span class="meta"><span class="tag"><?= ($r['source'] ?? '') === 'switch' ? 'Statement review' : 'Quote' ?></span><small><?= h($r['date'] ?? '') ?></small></span>
+          <span class="meta"><span class="tag"><?= ['switch' => 'Statement review', 'crypto' => 'Crypto'][$r['source'] ?? ''] ?? 'Quote' ?></span><small><?= h($r['date'] ?? '') ?></small></span>
         </summary>
         <dl>
           <dt>Email</dt><dd><a href="mailto:<?= h($r['email'] ?? '') ?>"><?= h($r['email'] ?? '') ?></a></dd>
-          <?php foreach (['phone' => 'Phone', 'industry' => 'Industry', 'turnover' => 'Monthly turnover'] as $k => $l): if (!empty($r[$k])): ?>
+          <?php foreach (['phone' => 'Phone', 'site' => 'Website', 'industry' => 'Industry', 'turnover' => 'Monthly volume'] as $k => $l): if (!empty($r[$k])): ?>
             <dt><?= $l ?></dt><dd><?= h($r[$k]) ?></dd>
           <?php endif; endforeach; ?>
           <?php if (!empty($r['channels'])): ?><dt>Takes payments</dt><dd><?= h(implode(', ', $r['channels'])) ?></dd><?php endif; ?>

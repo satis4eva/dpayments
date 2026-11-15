@@ -19,12 +19,14 @@ function field(string $key, int $max = 500): string {
 }
 
 function back(string $source, string $error): void {
-    $page = $source === 'switch' ? '/switch/' : '/contact/';
-    header('Location: ' . $page . '?error=' . urlencode($error) . ($source === 'switch' ? '#review' : ''));
+    $pages = ['switch' => '/switch/', 'crypto' => '/crypto/', 'contact' => '/contact/'];
+    $anchors = ['switch' => '#review', 'crypto' => '#apply', 'contact' => ''];
+    header('Location: ' . $pages[$source] . '?error=' . urlencode($error) . $anchors[$source]);
     exit;
 }
 
-$source = field('source', 20) === 'switch' ? 'switch' : 'contact';
+$source = field('source', 20);
+if (!in_array($source, ['switch', 'crypto'], true)) $source = 'contact';
 
 // Honeypot: bots fill this in. Pretend success.
 if (field('website') !== '') {
@@ -39,6 +41,7 @@ $phone    = str_replace("\n", ' ', field('phone', 40));
 $industry = str_replace("\n", ' ', field('industry', 80));
 $turnover = str_replace("\n", ' ', field('turnover', 80));
 $message  = field('message', 4000);
+$site     = str_replace("\n", '', field('site', 200));
 
 $allowed  = ['in-person' => 'In person', 'online' => 'Online', 'phone' => 'Over the phone', 'not-yet' => 'Not yet'];
 $channels = [];
@@ -52,16 +55,17 @@ if ($name === '' || !filter_var($email, FILTER_VALIDATE_EMAIL)) {
     back($source, 'missing');
 }
 
-$subjectPrefix = $source === 'switch' ? 'Statement review request' : 'Quote request';
+$subjectPrefix = ['switch' => 'Statement review request', 'crypto' => 'Crypto merchant application', 'contact' => 'Quote request'][$source];
 $subject = $subjectPrefix . ' — ' . ($business !== '' ? $business : $name);
 
 $lines = [
-    'New enquiry from dpayments.co.uk (' . ($source === 'switch' ? 'Switch & save' : 'Get a quote') . ')',
+    'New enquiry from dpayments.co.uk (' . ['switch' => 'Switch & save', 'crypto' => 'Crypto payments', 'contact' => 'Get a quote'][$source] . ')',
     '',
     'Name:       ' . $name,
     'Email:      ' . $email,
     'Business:   ' . ($business ?: '—'),
     'Phone:      ' . ($phone ?: '—'),
+    'Website:    ' . ($site ?: '—'),
     'Industry:   ' . ($industry ?: '—'),
     'Turnover:   ' . ($turnover ?: '—'),
     'Takes cards: ' . ($channels ? implode(', ', $channels) : '—'),
@@ -88,7 +92,7 @@ $dataDir = __DIR__ . '/admin/data';
 if (is_dir($dataDir) && is_writable($dataDir)) {
     $record = [
         'date' => gmdate('Y-m-d H:i'), 'source' => $source, 'name' => $name, 'email' => $email,
-        'business' => $business, 'phone' => $phone, 'industry' => $industry, 'turnover' => $turnover,
+        'business' => $business, 'phone' => $phone, 'site' => $site, 'industry' => $industry, 'turnover' => $turnover,
         'channels' => $channels, 'message' => $message,
     ];
     @file_put_contents($dataDir . '/enquiries.jsonl', json_encode($record, JSON_UNESCAPED_UNICODE) . "\n", FILE_APPEND | LOCK_EX);

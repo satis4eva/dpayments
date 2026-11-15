@@ -1,6 +1,6 @@
 from common import icon
 
-CRYPTO_URL = "https://crypto.dpayments.co.uk"
+CRYPTO_URL = "/crypto/"
 
 MENU_SOLUTIONS = [
     ("Accept payments", [

@@ -1,6 +1,6 @@
 import os, sys
 sys.path.insert(0, os.path.dirname(__file__))
-import p_home, p_cards, p_online, p_switch, p_how, p_industries, p_faq, p_misc, p_solutions, p_sectors
+import p_home, p_cards, p_online, p_switch, p_how, p_industries, p_faq, p_misc, p_solutions, p_sectors, p_crypto
 from common import SITE
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
@@ -22,6 +22,7 @@ pages = {
 }
 pages.update(p_solutions.build_all())
 pages.update(p_sectors.build_all())
+pages.update(p_crypto.build_all())
 
 for rel, html in pages.items():
     path = os.path.join(OUT, rel)

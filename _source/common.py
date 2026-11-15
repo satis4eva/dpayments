@@ -83,7 +83,7 @@ def header(current):
     <ul class="nav-links" id="nav-links">
       {menu("Solutions", MENU_SOLUTIONS, current, "sol")}
       {menu("Industries", MENU_INDUSTRIES, current, "ind")}
-      <li><a class="top-link" href="{CRYPTO_URL}">Crypto <span class="ext" aria-hidden="true">&#8599;</span></a></li>
+      <li><a class="top-link" href="{CRYPTO_URL}"{' aria-current="page"' if current == "/crypto/" else ""}>Crypto</a></li>
       <li><a class="top-link" href="/switch/"{sw}>Switch &amp; save</a></li>
       {menu("Company", MENU_COMPANY, current, "co")}
       <li class="nav-cta"><a class="btn btn-primary btn-sm" href="/contact/">Get a quote</a></li>
@@ -130,7 +130,7 @@ def footer():
           <li><a href="/solutions/settlements/">Settlements</a></li>
           <li><a href="/solutions/orchestration/">Payment orchestration</a></li>
           <li><a href="/solutions/risk-fraud/">Risk &amp; fraud</a></li>
-          <li><a href="https://crypto.dpayments.co.uk">Crypto payments</a></li>
+          <li><a href="/crypto/">Crypto payments</a></li>
         </ul>
       </div>
       <div>
