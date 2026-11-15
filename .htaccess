@@ -3,4 +3,3 @@
   RewriteEngine On
   RewriteRule ^ https://dpayments.co.uk/crypto/ [R=301,L]
 </IfModule>
-Redirect 301 / https://dpayments.co.uk/crypto/
