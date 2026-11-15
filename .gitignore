@@ -1,0 +1,4 @@
+# Portal secrets and runtime data — keep on the server only
+admin/config.php
+admin/data/*
+!admin/data/.htaccess
