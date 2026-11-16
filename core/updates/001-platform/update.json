@@ -1,0 +1,168 @@
+{
+ "id": "001-platform",
+ "pages": {
+  "software": {
+   "file": "software.html",
+   "title": "Fintech Software: Orchestration, Core Banking, Payment Switches & Crypto | DPayments",
+   "description": "Payment orchestrator, core banking, loan management and treasury, payment switches (Visa, Mastercard, JCB, UnionPay, UPI), P2P payments, crypto wallet as a service and crypto gateway software."
+  },
+  "services": {
+   "file": "services.html",
+   "title": "Fintech Services: BaaS, Named IBANs, Acquiring, Card Issuance & Remittance | DPayments",
+   "description": "B2B on/off-ramping, stablecoin remittance, Banking-as-a-Service, named IBANs via API, crypto gateway services, acquiring, multi-currency card issuance and global B2B gift cards."
+  }
+ },
+ "menu_insert": {
+  "item": {
+   "type": "mega",
+   "label": "Platform",
+   "columns": [
+    {
+     "title": "Software",
+     "items": [
+      {
+       "label": "Payment orchestrator",
+       "url": "/software/#orchestrator",
+       "icon": "refresh",
+       "desc": "Route across many providers"
+      },
+      {
+       "label": "Core banking",
+       "url": "/software/#core-banking",
+       "icon": "bank",
+       "desc": "For neobanks & digital banks"
+      },
+      {
+       "label": "Lending, ledgers & treasury",
+       "url": "/software/#lending-treasury",
+       "icon": "coins",
+       "desc": "Loans, ledgers, safeguarding"
+      },
+      {
+       "label": "Payment switches",
+       "url": "/software/#payment-switch",
+       "icon": "plug",
+       "desc": "Visa, Mastercard, JCB, UnionPay, UPI"
+      },
+      {
+       "label": "P2P payments",
+       "url": "/software/#p2p",
+       "icon": "users",
+       "desc": "Instant person-to-person transfers"
+      },
+      {
+       "label": "Crypto wallet as a service",
+       "url": "/software/#crypto-wallet",
+       "icon": "wallet",
+       "desc": "White-label crypto wallets"
+      },
+      {
+       "label": "Crypto gateway software",
+       "url": "/software/#crypto-gateway",
+       "icon": "sparkle",
+       "desc": "Accept crypto payments"
+      }
+     ]
+    },
+    {
+     "title": "Services",
+     "items": [
+      {
+       "label": "On- & off-ramping",
+       "url": "/services/#ramping",
+       "icon": "refresh",
+       "desc": "Fiat to crypto and back, B2B"
+      },
+      {
+       "label": "Stablecoin remittance",
+       "url": "/services/#remittance",
+       "icon": "globe",
+       "desc": "Faster cross-border transfers"
+      },
+      {
+       "label": "Banking-as-a-Service",
+       "url": "/services/#baas",
+       "icon": "bank",
+       "desc": "Embed accounts, payments, cards"
+      },
+      {
+       "label": "Named IBANs via API",
+       "url": "/services/#iban",
+       "icon": "card",
+       "desc": "UK account structures by API"
+      },
+      {
+       "label": "Crypto gateway services",
+       "url": "/services/#crypto-gateway-service",
+       "icon": "sparkle",
+       "desc": "Fully managed crypto acceptance"
+      },
+      {
+       "label": "Acquiring",
+       "url": "/services/#acquiring",
+       "icon": "terminal",
+       "desc": "Visa, Mastercard and UPI"
+      },
+      {
+       "label": "Card issuance",
+       "url": "/services/#card-issuing",
+       "icon": "card",
+       "desc": "Multi-BIN, fiat or stablecoin"
+      },
+      {
+       "label": "Global gift cards",
+       "url": "/services/#gift-cards",
+       "icon": "gift",
+       "desc": "B2B rewards and incentives"
+      }
+     ]
+    }
+   ]
+  },
+  "after_label": "Industries",
+  "remove_top_urls": [
+   "/switch/"
+  ]
+ },
+ "footer_add": {
+  "column": {
+   "title": "Platform",
+   "items": [
+    {
+     "label": "Software solutions",
+     "url": "/software/"
+    },
+    {
+     "label": "Services",
+     "url": "/services/"
+    },
+    {
+     "label": "Core banking",
+     "url": "/software/#core-banking"
+    },
+    {
+     "label": "Payment switches",
+     "url": "/software/#payment-switch"
+    },
+    {
+     "label": "Banking-as-a-Service",
+     "url": "/services/#baas"
+    },
+    {
+     "label": "Card issuance",
+     "url": "/services/#card-issuing"
+    },
+    {
+     "label": "Global gift cards",
+     "url": "/services/#gift-cards"
+    }
+   ]
+  },
+  "position": 1
+ },
+ "home_insert": {
+  "file": "home-section.html",
+  "marker": "id=\"platform\"",
+  "before": "<section class=\"section-dark\">"
+ }
+}

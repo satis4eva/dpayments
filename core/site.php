@@ -23,11 +23,86 @@ function copy_tree(string $src, string $dst): void {
 }
 
 function ensure_content(): void {
-    if (is_file(CONTENT_DIR . '/settings.json')) return;
-    copy_tree(DEFAULT_DIR, CONTENT_DIR);
-    file_put_contents(CONTENT_DIR . '/.htaccess', "Require all denied\n");
-    foreach (['_backups', 'data'] as $d) if (!is_dir(CONTENT_DIR . "/$d")) mkdir(CONTENT_DIR . "/$d", 0750, true);
-    if (!is_dir(UPLOAD_DIR)) mkdir(UPLOAD_DIR, 0755, true);
+    if (!is_file(CONTENT_DIR . '/settings.json')) {
+        copy_tree(DEFAULT_DIR, CONTENT_DIR);
+        file_put_contents(CONTENT_DIR . '/.htaccess', "Require all denied\n");
+        foreach (['_backups', 'data'] as $d) if (!is_dir(CONTENT_DIR . "/$d")) mkdir(CONTENT_DIR . "/$d", 0750, true);
+        if (!is_dir(UPLOAD_DIR)) mkdir(UPLOAD_DIR, 0755, true);
+    }
+    run_updates();
+}
+
+/**
+ * One-time content updates shipped with the code (core/updates/NNN-name/update.json).
+ * They only ADD things (new pages, menu items, a home section) and never overwrite
+ * your edits. Each runs once; everything it touches is backed up first.
+ */
+function run_updates(): void {
+    $dirs = glob(__DIR__ . '/updates/*/update.json') ?: [];
+    if (!$dirs) return;
+    $appliedFile = CONTENT_DIR . '/data/updates.json';
+    $applied = is_file($appliedFile) ? (json_decode((string)file_get_contents($appliedFile), true) ?: []) : [];
+    $pending = array_filter($dirs, fn($f) => !isset($applied[basename(dirname($f))]));
+    if (!$pending) return;
+    if (!is_dir(CONTENT_DIR . '/data')) mkdir(CONTENT_DIR . '/data', 0750, true);
+    $lock = fopen(CONTENT_DIR . '/data/updates.lock', 'c');
+    if (!$lock || !flock($lock, LOCK_EX | LOCK_NB)) return;
+    $applied = is_file($appliedFile) ? (json_decode((string)file_get_contents($appliedFile), true) ?: []) : [];
+    sort($pending);
+    foreach ($pending as $f) {
+        $id = basename(dirname($f));
+        if (isset($applied[$id])) continue;
+        $u = json_decode((string)file_get_contents($f), true) ?: [];
+        $dir = dirname($f);
+        try {
+            // new pages (skipped if a page with that address already exists)
+            $pages = read_json('pages.json');
+            $changed = false;
+            foreach ($u['pages'] ?? [] as $slug => $p) {
+                if (isset($pages[$slug])) continue;
+                write_file('pages/' . slug_file($slug), (string)file_get_contents($dir . '/' . $p['file']));
+                $pages[$slug] = ['title' => $p['title'] ?? '', 'description' => $p['description'] ?? '', 'noindex' => false, 'core' => false, 'schema' => '', 'nav' => '', 'draft' => false, 'created' => gmdate('c')];
+                $changed = true;
+            }
+            if ($changed) write_json('pages.json', $pages);
+            // menu
+            if (!empty($u['menu_insert'])) {
+                $m = read_json('menus.json');
+                $mi = $u['menu_insert'];
+                $labels = array_map(fn($x) => strtolower((string)($x['label'] ?? '')), $m['header'] ?? []);
+                if (!in_array(strtolower($mi['item']['label']), $labels, true)) {
+                    $m['header'] = array_values(array_filter($m['header'] ?? [], fn($x) => !(($x['type'] ?? 'link') === 'link' && in_array($x['url'] ?? '', $mi['remove_top_urls'] ?? [], true))));
+                    $pos = count($m['header']);
+                    foreach ($m['header'] as $i => $x) if (strcasecmp((string)($x['label'] ?? ''), (string)($mi['after_label'] ?? '')) === 0) { $pos = $i + 1; break; }
+                    array_splice($m['header'], $pos, 0, [$mi['item']]);
+                }
+                if (!empty($u['footer_add'])) {
+                    $titles = array_map(fn($x) => strtolower((string)($x['title'] ?? '')), $m['footer'] ?? []);
+                    if (!in_array(strtolower($u['footer_add']['column']['title']), $titles, true)) {
+                        array_splice($m['footer'], min((int)($u['footer_add']['position'] ?? 99), count($m['footer'] ?? [])), 0, [$u['footer_add']['column']]);
+                    }
+                }
+                write_json('menus.json', $m);
+            }
+            // home section
+            if (!empty($u['home_insert'])) {
+                $h = $u['home_insert'];
+                $body = page_body('home');
+                if ($body !== '' && strpos($body, $h['marker']) === false) {
+                    $sec = (string)file_get_contents($dir . '/' . $h['file']);
+                    $at = strpos($body, $h['before']);
+                    $body = $at !== false ? substr($body, 0, $at) . $sec . substr($body, $at) : $body . "\n" . $sec;
+                    write_file('pages/home.html', $body);
+                }
+            }
+            $applied[$id] = gmdate('c');
+        } catch (Throwable $e) {
+            $applied[$id] = 'failed: ' . $e->getMessage();
+        }
+        file_put_contents($appliedFile, json_encode($applied, JSON_PRETTY_PRINT));
+    }
+    flock($lock, LOCK_UN);
+    fclose($lock);
 }
 
 function content_path(string $rel): string { return CONTENT_DIR . '/' . ltrim($rel, '/'); }

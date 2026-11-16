@@ -709,3 +709,20 @@ legend { padding: 0; }
 .img-text img { width: 100%; border-radius: var(--radius-lg); aspect-ratio: 4/3; object-fit: cover; background: var(--accent-soft); }
 @media (max-width: 980px) { .post-grid { grid-template-columns: repeat(2, 1fr); } }
 @media (max-width: 640px) { .post-grid { grid-template-columns: 1fr; } }
+
+/* Platform: software & services */
+.plat-item { scroll-margin-top: 80px; }
+.plat-num { display: flex; align-items: center; gap: 12px; margin-bottom: 14px; } .plat-num .icon { margin: 0; } .plat-num .tag { margin: 0; }
+.plat-card h4 { margin-bottom: 4px; } .plat-card .strip { margin-top: 8px; } .plat-card .mchip { box-shadow: none; font-size: .82rem; padding: 6px 12px; }
+.section-white .plat-card { background: var(--bg); }
+.plat-panel { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 26px; display: flex; flex-direction: column; }
+.plat-panel.dark { background: var(--dark); border-color: var(--dark); color: #c6d1d8; }
+.plat-panel.dark h3 { color: #fff; } .plat-panel.dark .icon { background: color-mix(in srgb, var(--accent-light) 16%, transparent); color: var(--accent-light); }
+.pp-head { display: flex; gap: 14px; align-items: center; margin-bottom: 14px; } .pp-head .icon { margin: 0; } .pp-head h3 { margin: 0; } .pp-head small { color: var(--muted); }
+.plat-panel.dark .pp-head small { color: #8ea0ad; }
+.plat-row { display: flex; align-items: center; gap: 12px; padding: 11px 6px; border-bottom: 1px solid var(--line); text-decoration: none; color: var(--ink); font-weight: 600; font-size: .96rem; }
+.plat-row svg { width: 18px; height: 18px; color: var(--accent); flex: none; } .plat-row em { margin-left: auto; font-style: normal; color: var(--muted); transition: transform .2s; }
+.plat-row:hover { color: var(--accent-ink); } .plat-row:hover em { transform: translateX(3px); color: var(--accent); }
+.plat-panel.dark .plat-row { color: #fff; border-color: rgba(255,255,255,.08); } .plat-panel.dark .plat-row svg { color: var(--accent-light); }
+.plat-panel.dark .plat-row:hover { color: var(--accent-light); }
+.plat-panel .btn { align-self: flex-start; }
