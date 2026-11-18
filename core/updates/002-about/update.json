@@ -1,0 +1,41 @@
+{
+ "id": "002-about",
+ "pages": {
+  "about": {
+   "file": "about.html",
+   "title": "About Us: Our Mission & Vision | DPayments",
+   "description": "DPayments gives businesses the payment and banking infrastructure to get paid, move money and scale across borders, connecting Europe and Asia-Pacific through one trusted partner."
+  }
+ },
+ "menu_add_items": [
+  {
+   "menu_label": "Company",
+   "column": 0,
+   "position": 0,
+   "item": {
+    "label": "About us",
+    "url": "/about/",
+    "icon": "target",
+    "desc": "Our mission and vision"
+   }
+  }
+ ],
+ "footer_add_items": [
+  {
+   "column_title": "Company",
+   "position": 0,
+   "item": {
+    "label": "About us",
+    "url": "/about/"
+   }
+  }
+ ],
+ "home_insert": {
+  "file": "home-section.html",
+  "marker": "id=\"mission\"",
+  "before": [
+   "<section class=\"section-white\" id=\"platform\">",
+   "<section class=\"section-dark\">"
+  ]
+ }
+}

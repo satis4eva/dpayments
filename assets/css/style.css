@@ -726,3 +726,31 @@ legend { padding: 0; }
 .plat-panel.dark .plat-row { color: #fff; border-color: rgba(255,255,255,.08); } .plat-panel.dark .plat-row svg { color: var(--accent-light); }
 .plat-panel.dark .plat-row:hover { color: var(--accent-light); }
 .plat-panel .btn { align-self: flex-start; }
+
+/* About: mission & vision */
+.mv-grid { align-items: stretch; }
+.mv-card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius-lg); padding: 40px; position: relative; overflow: hidden; }
+.mv-card .icon { margin-bottom: 18px; }
+.mv-card .eyebrow { display: flex; margin-bottom: 12px; }
+.mv-text { font-family: var(--font-head); font-size: clamp(1.15rem, 1.8vw, 1.42rem); line-height: 1.5; font-weight: 600; color: var(--ink); margin: 0; letter-spacing: -.01em; }
+.mv-card.dark { background: var(--dark); border-color: var(--dark); }
+.mv-card.dark .mv-text { color: #fff; } .mv-card.dark .eyebrow { color: var(--accent-light); }
+.mv-card.dark .icon { background: color-mix(in srgb, var(--accent-light) 16%, transparent); color: var(--accent-light); }
+.mv-card.dark::after { content: ""; position: absolute; right: -90px; bottom: -90px; width: 260px; height: 260px; border-radius: 50%; background: radial-gradient(circle, color-mix(in srgb, var(--accent) 45%, transparent), transparent 70%); }
+.section-white .mv-card:not(.dark) { background: var(--bg); }
+.mv-steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 24px; }
+.mv-steps div { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 14px 16px; }
+.mv-steps b { display: block; font-family: var(--font-head); color: var(--ink); } .mv-steps small { color: var(--muted); font-size: .85rem; }
+.netmap { position: relative; height: 300px; background: var(--dark); border-radius: var(--radius-lg); overflow: hidden; }
+.netmap::before { content: ""; position: absolute; inset: 0; background-image: radial-gradient(rgba(255,255,255,.08) 1px, transparent 1px); background-size: 18px 18px; }
+.nm-lines { position: absolute; inset: 20px 0; width: 100%; height: calc(100% - 40px); }
+.nm-lines path { fill: none; stroke: var(--accent-light); stroke-width: 2; stroke-dasharray: 6 6; opacity: .6; animation: dash 2.5s linear infinite; }
+@keyframes dash { to { stroke-dashoffset: -24; } }
+.nm-node { position: absolute; top: 50%; transform: translateY(-50%); width: 120px; height: 120px; border-radius: 50%; background: var(--accent); color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; box-shadow: 0 0 0 10px color-mix(in srgb, var(--accent) 22%, transparent), 0 20px 40px rgba(0,0,0,.3); }
+.nm-node b { font-family: var(--font-head); font-size: 1.05rem; } .nm-node small { opacity: .85; font-size: .75rem; }
+.nm-eu { left: 6%; } .nm-ap { right: 6%; }
+.nm-chip { position: absolute; left: 50%; transform: translateX(-50%); display: inline-flex; align-items: center; gap: 6px; background: #fff; color: var(--ink); border-radius: 999px; padding: 6px 14px; font-weight: 600; font-size: .82rem; box-shadow: 0 8px 20px rgba(0,0,0,.25); white-space: nowrap; }
+.nm-chip svg { width: 15px; height: 15px; color: var(--accent); }
+.nm-chip.c1 { top: 14%; } .nm-chip.c2 { top: 50%; transform: translate(-50%, -50%); } .nm-chip.c3 { bottom: 14%; }
+@media (max-width: 640px) { .mv-card { padding: 28px; } .mv-steps { grid-template-columns: 1fr; } .nm-node { width: 92px; height: 92px; } .nm-node b { font-size: .9rem; } .netmap { height: 260px; } }
+@media (prefers-reduced-motion: reduce) { .nm-lines path { animation: none; } }

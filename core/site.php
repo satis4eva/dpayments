@@ -84,13 +84,38 @@ function run_updates(): void {
                 }
                 write_json('menus.json', $m);
             }
+            // single links added to an existing dropdown column / footer column (skipped if the URL is already there)
+            if (!empty($u['menu_add_items']) || !empty($u['footer_add_items'])) {
+                $m = read_json('menus.json');
+                $has = fn($items, $url) => in_array($url, array_column($items ?? [], 'url'), true);
+                foreach ($u['menu_add_items'] ?? [] as $a) {
+                    foreach ($m['header'] as &$top) {
+                        if (($top['type'] ?? '') !== 'mega' || strcasecmp((string)$top['label'], (string)$a['menu_label']) !== 0) continue;
+                        $ci = min((int)($a['column'] ?? 0), max(0, count($top['columns'] ?? []) - 1));
+                        if (!isset($top['columns'][$ci])) $top['columns'][$ci] = ['title' => '', 'items' => []];
+                        if (!$has($top['columns'][$ci]['items'], $a['item']['url'])) array_splice($top['columns'][$ci]['items'], (int)($a['position'] ?? 0), 0, [$a['item']]);
+                        break;
+                    }
+                    unset($top);
+                }
+                foreach ($u['footer_add_items'] ?? [] as $a) {
+                    foreach ($m['footer'] as &$col) {
+                        if (strcasecmp((string)$col['title'], (string)$a['column_title']) !== 0) continue;
+                        if (!$has($col['items'], $a['item']['url'])) array_splice($col['items'], (int)($a['position'] ?? 0), 0, [$a['item']]);
+                        break;
+                    }
+                    unset($col);
+                }
+                write_json('menus.json', $m);
+            }
             // home section
             if (!empty($u['home_insert'])) {
                 $h = $u['home_insert'];
                 $body = page_body('home');
                 if ($body !== '' && strpos($body, $h['marker']) === false) {
                     $sec = (string)file_get_contents($dir . '/' . $h['file']);
-                    $at = strpos($body, $h['before']);
+                    $at = false;
+                    foreach ((array)$h['before'] as $b) { $at = strpos($body, $b); if ($at !== false) break; }
                     $body = $at !== false ? substr($body, 0, $at) . $sec . substr($body, $at) : $body . "\n" . $sec;
                     write_file('pages/home.html', $body);
                 }
