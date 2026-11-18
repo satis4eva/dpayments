@@ -1,0 +1,11 @@
+{
+ "id": "004-social",
+ "page_insert": [
+  {
+   "page": "contact",
+   "marker": "{{social_links}}",
+   "after": "roughly what you take by card each month.</p></div>",
+   "html": "\n      {{social_links}}"
+  }
+ ]
+}

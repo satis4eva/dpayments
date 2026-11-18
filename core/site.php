@@ -121,6 +121,16 @@ function run_updates(): void {
                     write_file('pages/home.html', $body);
                 }
             }
+            // a snippet inserted into an existing page (skipped if already there or the anchor is gone)
+            foreach ($u['page_insert'] ?? [] as $pi) {
+                $body = page_body($pi['page']);
+                if ($body === '' || strpos($body, $pi['marker']) !== false) continue;
+                $snip = (string)($pi['html'] ?? '');
+                $at = strpos($body, $pi['after']);
+                if ($at === false) continue;
+                $at += strlen($pi['after']);
+                write_file('pages/' . slug_file($pi['page']), substr($body, 0, $at) . $snip . substr($body, $at));
+            }
             // settings that are only changed if you haven't customised them yet
             if (!empty($u['settings_if_default'])) {
                 $st = read_json('settings.json'); $sc = false;
@@ -260,13 +270,31 @@ function icon_names(): array {
 }
 
 const SOCIAL_ICONS = [
-    'linkedin' => '<path d="M6 9v9M6 6v.01M10 18v-5a3 3 0 0 1 6 0v5M10 9v9"/><rect x="2" y="2" width="20" height="20" rx="4"/>',
-    'facebook' => '<path d="M15 3h-2a4 4 0 0 0-4 4v3H6v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h2z"/>',
     'instagram' => '<rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><path d="M17.5 6.5h.01"/>',
+    'facebook' => '<path d="M15 3h-2a4 4 0 0 0-4 4v3H6v4h3v7h4v-7h3l1-4h-4V7a1 1 0 0 1 1-1h2z"/>',
     'x' => '<path d="M4 4l16 16M20 4L4 20"/>',
     'youtube' => '<rect x="2" y="5" width="20" height="14" rx="4"/><path d="M10 9l5 3-5 3z"/>',
+    'telegram' => '<path d="M21.5 4.5L2.8 11.7l5.7 2.1 2.2 6.2 3.2-3.6 4.9 3.6z"/><path d="M8.5 13.8L21.5 4.5"/>',
+    'threads' => '<path d="M16.2 11.2c-.5-2.4-2.2-3.7-4.4-3.7-2.8 0-4.6 2.1-4.6 4.8 0 2.8 1.8 4.8 4.5 4.8 2.4 0 4-1.4 4-3.3 0-1.5-1.1-2.5-2.9-2.5-1.8 0-2.9 1-2.9 2.2 0 1.1.9 1.8 2 1.8 2.2 0 3.1-1.9 3.1-4.5"/><path d="M20 8a9 9 0 1 0 .6 7"/>',
+    'linkedin' => '<path d="M6 9v9M6 6v.01M10 18v-5a3 3 0 0 1 6 0v5M10 9v9"/><rect x="2" y="2" width="20" height="20" rx="4"/>',
     'tiktok' => '<path d="M14 3v11a4 4 0 1 1-4-4"/><path d="M14 3a5 5 0 0 0 5 5"/>',
 ];
+const SOCIAL_NAMES = ['instagram' => 'Instagram', 'facebook' => 'Facebook', 'x' => 'X (Twitter)', 'youtube' => 'YouTube',
+    'telegram' => 'Telegram', 'threads' => 'Threads', 'linkedin' => 'LinkedIn', 'tiktok' => 'TikTok'];
+
+/** Social profiles that have a link, in display order. */
+function social_links(): array {
+    $out = [];
+    $soc = settings()['social'] ?? [];
+    foreach (SOCIAL_ICONS as $k => $svg) {
+        $url = trim((string)($soc[$k] ?? ''));
+        if ($url !== '' && preg_match('~^https?://~', $url)) $out[$k] = $url;
+    }
+    return $out;
+}
+function social_svg(string $k): string {
+    return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . (SOCIAL_ICONS[$k] ?? '') . '</svg>';
+}
 
 // ---------------------------------------------------------------- tokens
 /** Replace {{email}}, {{phone}} etc. For the editor, text tokens are wrapped so they survive saving. */
@@ -281,6 +309,14 @@ function token_values(): array {
 }
 /** Block tokens render whole sections from live data, e.g. {{latest_posts}} on the home page. */
 function block_token(string $name, bool $forEdit): ?string {
+    if ($name === 'social_links') {
+        if ($forEdit) return '<div data-token="social_links" contenteditable="false" class="cms-token cms-block-token">Your social media links appear here (set them in Brand &amp; settings &rarr; Social media)</div>';
+        $links = social_links();
+        if (!$links) return '';
+        $h = '';
+        foreach ($links as $k => $url) $h .= '<a class="connect-link" href="' . e($url) . '" target="_blank" rel="noopener"><span class="cl-ic">' . social_svg($k) . '</span><span>' . e(SOCIAL_NAMES[$k]) . '</span><em>&#8599;</em></a>';
+        return '<div class="connect-box"><h3>Connect with us</h3><p class="muted">Follow DPayments for news, product updates and payments insights.</p><div class="connect-grid">' . $h . '</div></div>';
+    }
     if ($name !== 'latest_posts') return null;
     if ($forEdit) return '<div data-token="latest_posts" contenteditable="false" class="cms-token cms-block-token">Latest blog posts appear here automatically (hidden until you publish your first post)</div>';
     $list = array_slice(published_posts(), 0, 3, true);
@@ -293,7 +329,7 @@ function block_token(string $name, bool $forEdit): ?string {
 }
 
 function apply_tokens(string $html, bool $forEdit = false): string {
-    $html = preg_replace_callback('~\{\{\s*(latest_posts)\s*\}\}~', fn($m) => block_token($m[1], $forEdit) ?? $m[0], $html);
+    $html = preg_replace_callback('~\{\{\s*(latest_posts|social_links)\s*\}\}~', fn($m) => block_token($m[1], $forEdit) ?? $m[0], $html);
     $vals = token_values();
     $parts = preg_split('~(<[^>]+>)~', $html, -1, PREG_SPLIT_DELIM_CAPTURE) ?: [];
     foreach ($parts as $i => $p) {
@@ -392,10 +428,8 @@ function render_footer(): string {
     if (!empty($c['address'])) $contact .= '<li>' . icon_svg('store') . '<span>' . nl2br(e($c['address'])) . '</span></li>';
     if (!empty($c['hours'])) $contact .= '<li>' . icon_svg('clock') . '<span>' . e($c['hours']) . '</span></li>';
     $social = '';
-    foreach ($s['social'] ?? [] as $k => $url) {
-        if ($url && isset(SOCIAL_ICONS[$k]) && preg_match('~^https?://~', $url)) {
-            $social .= '<a href="' . e($url) . '" target="_blank" rel="noopener" aria-label="' . e(ucfirst($k)) . '"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' . SOCIAL_ICONS[$k] . '</svg></a>';
-        }
+    foreach (social_links() as $k => $url) {
+        $social .= '<a href="' . e($url) . '" target="_blank" rel="noopener" aria-label="' . e(SOCIAL_NAMES[$k]) . '" title="' . e(SOCIAL_NAMES[$k]) . '">' . social_svg($k) . '</a>';
     }
     $legal = '';
     foreach ($m['legal'] ?? [] as $x) $legal .= '<li><a href="' . e($x['url']) . '">' . e($x['label']) . '</a></li>';
@@ -411,7 +445,7 @@ function render_footer(): string {
         <a href="/" aria-label="' . e($s['site_name'] ?? '') . ' home">' . logo_html(true) . '</a>
         <p style="margin-top:18px">' . e($s['tagline'] ?? '') . '</p>
         <ul class="footer-contact">' . $contact . '</ul>
-        ' . ($social ? '<div class="social">' . $social . '</div>' : '') . '
+        ' . ($social ? '<h4 class="connect-title">Connect with us</h4><div class="social">' . $social . '</div>' : '') . '
       </div>' . $cols . '
     </div>
     <div class="footer-bottom">

@@ -116,9 +116,9 @@ admin_header('Brand & settings', 'settings');
   <form method="post" class="panel stack tabpane" id="social">
     <?= csrf_field() ?><input type="hidden" name="tab" value="social">
     <h2>Social media</h2>
-    <p class="muted small">Icons appear in the footer for each link you add. Leave blank to hide.</p>
+    <p class="muted small">Each profile you add appears under &ldquo;Connect with us&rdquo; in the footer and on the contact page. Paste the full link to your profile (e.g. https://instagram.com/yourname). Leave blank to hide.</p>
     <div class="two">
-      <?php foreach (['linkedin' => 'LinkedIn', 'facebook' => 'Facebook', 'instagram' => 'Instagram', 'x' => 'X (Twitter)', 'youtube' => 'YouTube', 'tiktok' => 'TikTok'] as $k => $l): ?>
+      <?php foreach (SOCIAL_NAMES as $k => $l): ?>
         <label><?= $l ?> <input name="<?= $k ?>" value="<?= e($s['social'][$k] ?? '') ?>" placeholder="https://"></label>
       <?php endforeach; ?>
     </div>
