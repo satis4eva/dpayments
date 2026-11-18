@@ -86,8 +86,8 @@ admin_header($isNew ? 'New post' : 'Edit post', 'blog');
         <div class="cover-pick" id="cover-pick" style="<?= !empty($p['cover']) ? "background-image:url('" . e($p['cover']) . "')" : '' ?>"><span><?= empty($p['cover']) ? 'Click to upload' : '' ?></span></div>
         <input type="hidden" name="cover" id="cover" value="<?= e($p['cover'] ?? '') ?>">
         <button type="button" class="link-danger small" id="cover-remove" <?= empty($p['cover']) ? 'hidden' : '' ?>>Remove cover</button>
-        <label>Category <input name="category" value="<?= e($p['category'] ?? '') ?>" maxlength="40" placeholder="e.g. Guides" list="cats">
-          <datalist id="cats"><?php foreach (array_unique(array_filter(array_column(posts(), 'category'))) as $c): ?><option value="<?= e($c) ?>"><?php endforeach; ?></datalist></label>
+        <label>Category <input name="category" value="<?= e($p['category'] ?? '') ?>" maxlength="40" placeholder="e.g. News or Articles" list="cats">
+          <datalist id="cats"><?php foreach (array_unique(array_merge(['News', 'Articles', 'Guides'], array_filter(array_column(posts(), 'category')))) as $c): ?><option value="<?= e($c) ?>"><?php endforeach; ?></datalist></label>
         <label>Author <input name="author" value="<?= e($p['author'] ?? '') ?>" maxlength="60"></label>
         <label>Summary <small class="muted">(shown on the blog page and in Google)</small><textarea name="excerpt" rows="3" maxlength="300"><?= e($p['excerpt'] ?? '') ?></textarea></label>
       </div>

@@ -70,7 +70,8 @@ function run_updates(): void {
                 $m = read_json('menus.json');
                 $mi = $u['menu_insert'];
                 $labels = array_map(fn($x) => strtolower((string)($x['label'] ?? '')), $m['header'] ?? []);
-                if (!in_array(strtolower($mi['item']['label']), $labels, true)) {
+                $urls = array_column($m['header'] ?? [], 'url');
+                if (!in_array(strtolower($mi['item']['label']), $labels, true) && (empty($mi['item']['url']) || !in_array($mi['item']['url'], $urls, true))) {
                     $m['header'] = array_values(array_filter($m['header'] ?? [], fn($x) => !(($x['type'] ?? 'link') === 'link' && in_array($x['url'] ?? '', $mi['remove_top_urls'] ?? [], true))));
                     $pos = count($m['header']);
                     foreach ($m['header'] as $i => $x) if (strcasecmp((string)($x['label'] ?? ''), (string)($mi['after_label'] ?? '')) === 0) { $pos = $i + 1; break; }
@@ -119,6 +120,16 @@ function run_updates(): void {
                     $body = $at !== false ? substr($body, 0, $at) . $sec . substr($body, $at) : $body . "\n" . $sec;
                     write_file('pages/home.html', $body);
                 }
+            }
+            // settings that are only changed if you haven't customised them yet
+            if (!empty($u['settings_if_default'])) {
+                $st = read_json('settings.json'); $sc = false;
+                foreach ($u['settings_if_default'] as $path => $rule) {
+                    [$a, $b] = explode('.', $path) + [1 => null];
+                    $cur = $b === null ? ($st[$a] ?? null) : ($st[$a][$b] ?? null);
+                    if ($cur === null || in_array($cur, $rule['if'], true)) { if ($b === null) $st[$a] = $rule['set']; else $st[$a][$b] = $rule['set']; $sc = true; }
+                }
+                if ($sc) write_json('settings.json', $st);
             }
             $applied[$id] = gmdate('c');
         } catch (Throwable $e) {
@@ -268,7 +279,21 @@ function token_values(): array {
         'site_name' => settings()['site_name'] ?? '', 'year' => date('Y'),
     ];
 }
+/** Block tokens render whole sections from live data, e.g. {{latest_posts}} on the home page. */
+function block_token(string $name, bool $forEdit): ?string {
+    if ($name !== 'latest_posts') return null;
+    if ($forEdit) return '<div data-token="latest_posts" contenteditable="false" class="cms-token cms-block-token">Latest blog posts appear here automatically (hidden until you publish your first post)</div>';
+    $list = array_slice(published_posts(), 0, 3, true);
+    if (!$list) return '';
+    $cards = '';
+    foreach ($list as $slug => $p) $cards .= post_card((string)$slug, $p);
+    $bt = settings()['blog']['title'] ?? 'Blog';
+    return '<section class="section-white latest-posts"><div class="container"><div class="head-row"><div><span class="eyebrow">' . e($bt) . '</span><h2>Latest news &amp; articles</h2></div>'
+        . '<a class="btn btn-ghost" href="/blog/">View all <span class="arrow" aria-hidden="true">&rarr;</span></a></div><div class="post-grid">' . $cards . '</div></div></section>';
+}
+
 function apply_tokens(string $html, bool $forEdit = false): string {
+    $html = preg_replace_callback('~\{\{\s*(latest_posts)\s*\}\}~', fn($m) => block_token($m[1], $forEdit) ?? $m[0], $html);
     $vals = token_values();
     $parts = preg_split('~(<[^>]+>)~', $html, -1, PREG_SPLIT_DELIM_CAPTURE) ?: [];
     foreach ($parts as $i => $p) {
@@ -458,24 +483,36 @@ function published_posts(): array {
     return $list;
 }
 
-function post_card(string $slug, array $p): string {
+function post_card(string $slug, array $p, bool $featured = false): string {
     $img = !empty($p['cover']) ? '<div class="pc-img" style="background-image:url(\'' . e($p['cover']) . '\')"></div>' : '<div class="pc-img pc-none">' . icon_svg('file') . '</div>';
-    return '<a class="post-card reveal" href="/blog/' . e($slug) . '/">' . $img . '<div class="pc-body">'
+    return '<a class="post-card reveal' . ($featured ? ' featured' : '') . '" href="/blog/' . e($slug) . '/">' . $img . '<div class="pc-body">'
         . (!empty($p['category']) ? '<span class="tag">' . e($p['category']) . '</span>' : '')
         . '<h3>' . e($p['title'] ?? '') . '</h3><p>' . e($p['excerpt'] ?? '') . '</p><small>' . e(format_date($p['date'] ?? '')) . '</small></div></a>';
 }
 
 function render_blog_index(): string {
     $s = settings();
-    $list = published_posts();
+    $all = published_posts();
+    $cats = array_values(array_unique(array_filter(array_map(fn($p) => trim((string)($p['category'] ?? '')), $all))));
+    sort($cats);
+    $cat = trim((string)($_GET['cat'] ?? ''));
+    if ($cat !== '' && !in_array($cat, $cats, true)) $cat = '';
+    $list = $cat === '' ? $all : array_filter($all, fn($p) => ($p['category'] ?? '') === $cat);
     $cards = '';
-    foreach ($list as $slug => $p) $cards .= post_card($slug, $p);
-    if (!$cards) $cards = '<div class="card card-lg center" style="grid-column:1/-1"><h3>No posts yet</h3><p>Check back soon.</p></div>';
+    $first = true;
+    foreach ($list as $slug => $p) { $cards .= post_card((string)$slug, $p, $first && $cat === "" && count($list) >= 4 && count($list) % 3 === 1); $first = false; }
+    if (!$cards) $cards = '<div class="card card-lg center blog-empty" style="grid-column:1/-1">' . icon_svg('file') . '<h3>No posts yet</h3><p>News and articles will appear here soon.</p></div>';
+    $filters = '';
+    if (count($cats) > 1) {
+        $filters = '<div class="blog-filters"><a class="pill' . ($cat === '' ? ' on' : '') . '" href="/blog/">All</a>';
+        foreach ($cats as $c) $filters .= '<a class="pill' . ($cat === $c ? ' on' : '') . '" href="/blog/?cat=' . rawurlencode($c) . '">' . e($c) . '</a>';
+        $filters .= '</div>';
+    }
     $bt = $s['blog']['title'] ?? 'Blog';
     $main = '<section class="page-hero"><div class="container"><div class="crumbs"><a href="/">Home</a> / ' . e($bt) . '</div>'
-        . '<span class="eyebrow">' . e($bt) . '</span><h1>' . e($bt) . '</h1><p class="lede">' . e($s['blog']['intro'] ?? '') . '</p></div></section>'
+        . '<span class="eyebrow">' . e($bt) . '</span><h1>' . e($bt) . '</h1><p class="lede">' . e($s['blog']['intro'] ?? '') . '</p>' . $filters . '</div></section>'
         . '<section style="padding-top:0"><div class="container"><div class="post-grid">' . $cards . '</div></div></section>';
-    return render_document(['title' => $bt . ' | ' . ($s['site_name'] ?? ''), 'description' => $s['blog']['intro'] ?? '', 'nav' => '/blog/'], $main, '/blog/');
+    return render_document(['title' => ($cat ? $cat . ' | ' : '') . $bt . ' | ' . ($s['site_name'] ?? ''), 'description' => $s['blog']['intro'] ?? '', 'nav' => '/blog/', 'noindex' => $cat !== ''], $main, '/blog/');
 }
 
 function render_post(string $slug, array $p, bool $preview = false): string {

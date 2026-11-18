@@ -1,0 +1,46 @@
+{
+ "id": "003-blog",
+ "menu_insert": {
+  "item": {
+   "type": "link",
+   "label": "News & insights",
+   "url": "/blog/"
+  },
+  "after_label": "Crypto",
+  "remove_top_urls": []
+ },
+ "footer_add_items": [
+  {
+   "column_title": "Company",
+   "position": 1,
+   "item": {
+    "label": "News & insights",
+    "url": "/blog/"
+   }
+  }
+ ],
+ "home_insert": {
+  "file": "home-section.html",
+  "marker": "{{latest_posts}}",
+  "before": [
+   "<section class=\"section-tight\">\n  <div class=\"container\">\n    <a class=\"switch-band",
+   "<section class=\"section-tight\">"
+  ]
+ },
+ "settings_if_default": {
+  "blog.title": {
+   "if": [
+    "Insights",
+    "Blog"
+   ],
+   "set": "News & insights"
+  },
+  "blog.intro": {
+   "if": [
+    "News, guides and plain-English explainers on payments.",
+    ""
+   ],
+   "set": "Company news, industry updates and plain-English articles on payments, banking and crypto."
+  }
+ }
+}
