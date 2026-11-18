@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         'status' => ($_POST['status'] ?? '') === 'published' ? 'published' : 'draft',
         'category' => mb_substr(trim((string)($_POST['category'] ?? '')), 0, 40),
         'excerpt' => mb_substr(trim((string)($_POST['excerpt'] ?? '')), 0, 300),
-        'cover' => preg_match('~^/uploads/[a-z0-9-]+\.(jpg|jpeg|png|webp|gif)$~', (string)($_POST['cover'] ?? '')) ? $_POST['cover'] : '',
+        'cover' => preg_match('~^/(uploads|assets/img/blog)/[a-z0-9-]+\.(jpg|jpeg|png|webp|gif)$~', (string)($_POST['cover'] ?? '')) ? $_POST['cover'] : '',
         'author' => mb_substr(trim((string)($_POST['author'] ?? '')), 0, 60),
         'seo_title' => mb_substr(trim((string)($_POST['seo_title'] ?? '')), 0, 140),
         'updated' => gmdate('c'),

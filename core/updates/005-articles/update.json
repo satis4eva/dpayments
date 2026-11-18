@@ -1,0 +1,49 @@
+{
+ "id": "005-articles",
+ "posts": {
+  "uk-crypto-stablecoin-rules-finalised": {
+   "file": "uk-crypto-stablecoin-rules-finalised.html",
+   "title": "UK crypto and stablecoin rules are final: what businesses need to know",
+   "date": "2026-11-18",
+   "status": "published",
+   "category": "News",
+   "excerpt": "The FCA has published its final rules for the UK cryptoasset regime. Here is the timeline, who needs authorisation, and what it means if you accept crypto or stablecoin payments.",
+   "cover": "/assets/img/blog/uk-crypto-stablecoin-rules-finalised.jpg",
+   "author": "DPayments",
+   "seo_title": ""
+  },
+  "psr-merging-into-fca": {
+   "file": "psr-merging-into-fca.html",
+   "title": "The Payment Systems Regulator is being folded into the FCA. What changes?",
+   "date": "2026-11-18",
+   "status": "published",
+   "category": "News",
+   "excerpt": "The UK is abolishing the Payment Systems Regulator and moving its powers to the FCA. Here is what is happening and what it means for merchants and payment firms.",
+   "cover": "/assets/img/blog/psr-merging-into-fca.jpg",
+   "author": "DPayments",
+   "seo_title": ""
+  },
+  "commercial-vrp-explained": {
+   "file": "commercial-vrp-explained.html",
+   "title": "Commercial VRP is live: a new way to collect recurring payments in the UK",
+   "date": "2026-11-18",
+   "status": "published",
+   "category": "Articles",
+   "excerpt": "Commercial Variable Recurring Payments launched in June 2026 as the UK's first new payment scheme since Faster Payments. How they work, who can use them now, and how they compare with Direct Debit and cards.",
+   "cover": "/assets/img/blog/commercial-vrp-explained.jpg",
+   "author": "DPayments",
+   "seo_title": ""
+  },
+  "eu-instant-payments-verification-of-payee": {
+   "file": "eu-instant-payments-verification-of-payee.html",
+   "title": "Instant euro payments and Verification of Payee: one year on",
+   "date": "2026-11-18",
+   "status": "published",
+   "category": "Articles",
+   "excerpt": "The EU's Instant Payments Regulation made 10-second euro transfers and Verification of Payee standard. What the rules require, the 2027 deadlines still to come, and what businesses should do.",
+   "cover": "/assets/img/blog/eu-instant-payments-verification-of-payee.jpg",
+   "author": "DPayments",
+   "seo_title": ""
+  }
+ }
+}

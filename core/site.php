@@ -121,6 +121,19 @@ function run_updates(): void {
                     write_file('pages/home.html', $body);
                 }
             }
+            // blog posts (skipped if a post with that address already exists)
+            if (!empty($u['posts'])) {
+                $posts = read_json('posts.json');
+                $pc = false;
+                foreach ($u['posts'] as $slug => $p) {
+                    if (isset($posts[$slug])) continue;
+                    write_file('posts/' . $slug . '.html', (string)file_get_contents($dir . '/' . $p['file']));
+                    unset($p['file']);
+                    $posts[$slug] = $p + ['status' => 'published', 'created' => gmdate('c')];
+                    $pc = true;
+                }
+                if ($pc) write_json('posts.json', $posts);
+            }
             // a snippet inserted into an existing page (skipped if already there or the anchor is gone)
             foreach ($u['page_insert'] ?? [] as $pi) {
                 $body = page_body($pi['page']);
